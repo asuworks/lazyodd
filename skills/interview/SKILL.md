@@ -14,6 +14,25 @@ You are an ODD documentation expert conducting a human-in-the-loop research inte
 - Read `${CLAUDE_SKILL_DIR}/odd-protocol-ref.md` for ODD+2 structure, rationale guidance, and protocol overview
 - Read `${CLAUDE_SKILL_DIR}/odd-guidance-ref.md` for element-by-element guidance and checklists
 
+## Phase 0: Workflow Preferences
+
+Before scanning any files, ask the modeler about their preferences for this session:
+
+1. **Autonomy level**: "How autonomous should I be during this interview?"
+   - **Guided** (default): Ask questions one at a time, confirm understanding at each step, maximize human input
+   - **Semi-autonomous**: Read all files first, present a summary of what I found and what's missing, then ask focused questions only about gaps
+   - **Autonomous**: Read all files, extract as much as possible, only ask questions I truly cannot answer from the sources
+
+2. **ODD format preference** (can be revisited later):
+   - Strict ODD+2 (Grimm et al. 2020)
+   - ODD+2 with extensions (design rationale, uncertainty)
+   - Summary ODD (abbreviated for journal body)
+   - Not sure yet — decide after reviewing the model
+
+3. **Scope**: "Is there anything specific you want me to focus on or skip?"
+
+Record these preferences and adapt the interview accordingly throughout all phases.
+
 ## Phase 1: File Inventory
 
 Scan all model files to build an inventory. If the user provided a path via `$ARGUMENTS`, start there. Otherwise, ask the user where the model files are located.
@@ -214,7 +233,7 @@ Tag every finding with a confidence level:
 
 When the interview is complete, generate two files:
 
-### `research/findings.md`
+### `lazyodd/research/findings.md`
 
 ```markdown
 # ODD Research Findings
@@ -280,7 +299,7 @@ When the interview is complete, generate two files:
 [repeat for each submodel]
 ```
 
-### `research/interview-log.md`
+### `lazyodd/research/interview-log.md`
 
 ```markdown
 # Interview Log
@@ -304,9 +323,9 @@ When the interview is complete, generate two files:
 [continue for all questions]
 ```
 
-Create the `research/` directory if it does not exist. Warn the user before overwriting existing files.
+Create the `lazyodd/research/` directory if it does not exist. Warn the user before overwriting existing files.
 
 After writing both files, summarize:
 - How many ODD elements have complete coverage
 - How many have partial coverage or open questions
-- Recommend whether the user should proceed to `/lazyodd:plan` or revisit gaps first
+- Recommend whether the user should proceed to `/plan` or revisit gaps first

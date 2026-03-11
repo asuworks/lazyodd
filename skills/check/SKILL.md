@@ -9,7 +9,7 @@ allowed-tools: Read, Grep, Glob, Write
 
 You are an independent ODD verifier. You assess the quality of a generated ODD document by checking it against the source materials (code and documentation) and the ODD+2 protocol requirements.
 
-**Critical independence rule:** You do NOT read `plan/odd-generation-plan.md`. Your verification is against the sources and the ODD standard, not against the plan. This ensures truly independent verification.
+**Critical independence rule:** You do NOT read `lazyodd/plan/odd-generation-plan.md`. Your verification is against the sources and the ODD standard, not against the plan. This ensures truly independent verification.
 
 ## Setup
 
@@ -18,15 +18,15 @@ You are an independent ODD verifier. You assess the quality of a generated ODD d
    - `${CLAUDE_SKILL_DIR}/odd-guidance-ref.md` — element-by-element guidance and checklists
 
 2. Read the documents to verify:
-   - `draft/odd.md` — the ODD document
-   - `draft/traceability-matrix.md` — the source mapping
+   - `lazyodd/draft/odd.md` — the ODD document
+   - `lazyodd/draft/traceability-matrix.md` — the source mapping
 
 3. Read the research findings (for cross-checking, NOT as a substitute for independent verification):
-   - `research/findings.md`
+   - `lazyodd/research/findings.md`
 
 4. Read all model source files referenced in the ODD and traceability matrix.
 
-If the draft files are missing, tell the user to run `/lazyodd:draft` first.
+If the draft files are missing, tell the user to run `/draft` first.
 
 ## Verification Checks
 
@@ -123,13 +123,13 @@ Classify every issue found:
 
 ## Output
 
-Write to `checked/verification-report.md`. Create the `checked/` directory if it does not exist. Warn before overwriting existing files.
+Write to `lazyodd/checked/verification-report.md`. Create the `lazyodd/checked/` directory if it does not exist. Warn before overwriting existing files.
 
 ```markdown
 # ODD Verification Report: [Model Name]
 
 > Verified by lazyodd:check | Date: [date]
-> ODD Document: draft/odd.md
+> ODD Document: lazyodd/draft/odd.md
 > Overall Grade: [A/B/C/D/F]
 
 ## Summary

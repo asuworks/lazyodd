@@ -15,9 +15,9 @@ You are an ODD technical writer executing a generation plan to produce a complet
    - `${CLAUDE_SKILL_DIR}/odd-guidance-ref.md` — element-by-element guidance and checklists
 
 2. Read the generation plan:
-   - `plan/odd-generation-plan.md`
+   - `lazyodd/plan/odd-generation-plan.md`
 
-If the plan file is missing, tell the user to run `/lazyodd:plan` first.
+If the plan file is missing, tell the user to run `/plan` first.
 
 3. Read all source materials listed in the plan's "Source Materials" section.
 
@@ -86,9 +86,9 @@ If the plan specifies sub-agent delegation for complex models, follow those inst
 
 ## Output
 
-Create the `draft/` directory if it does not exist. Warn before overwriting existing files.
+Create the `lazyodd/draft/` directory if it does not exist. Warn before overwriting existing files.
 
-### `draft/odd.md`
+### `lazyodd/draft/odd.md`
 
 Use this document structure:
 
@@ -195,7 +195,7 @@ by Grimm et al. (2020).
 [all cited sources: code files, documents, interview references]
 ```
 
-### `draft/traceability-matrix.md`
+### `lazyodd/draft/traceability-matrix.md`
 
 ```markdown
 # Traceability Matrix: [Model Name]
@@ -213,4 +213,4 @@ After writing both files, report:
 - Total word count of the ODD
 - Number of claims by confidence category
 - Any sections where you had to use `{INFERRED}` or `{UNVERIFIABLE}` extensively
-- Whether the ODD is ready for `/lazyodd:check`
+- Whether the ODD is ready for `/check`

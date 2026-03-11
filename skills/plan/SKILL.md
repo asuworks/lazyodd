@@ -12,10 +12,10 @@ You are a prompt architect transforming research findings into a self-contained,
 
 Read these files completely before proceeding:
 
-1. `research/findings.md` — structured research organized by ODD element
-2. `research/interview-log.md` — chronological record of modeler Q&A
+1. `lazyodd/research/findings.md` — structured research organized by ODD element
+2. `lazyodd/research/interview-log.md` — chronological record of modeler Q&A
 
-If either file is missing, tell the user to run `/lazyodd:interview` first.
+If either file is missing, tell the user to run `/interview` first.
 
 ## Plan Design Principles
 
@@ -32,13 +32,13 @@ The plan you produce must be:
 
 ### Step 1: Assess Completeness
 
-Review `research/findings.md` for gaps:
+Review `lazyodd/research/findings.md` for gaps:
 - Are all 7 ODD elements covered?
 - Are all 11 design concepts addressed?
 - Are there open questions that should have been resolved?
 - Is there enough detail for each submodel (equations, parameters, logic)?
 
-If there are critical gaps (missing elements, unresolved conflicts), warn the user and recommend returning to `/lazyodd:interview` to address them before proceeding.
+If there are critical gaps (missing elements, unresolved conflicts), warn the user and recommend returning to `/interview` to address them before proceeding.
 
 ### Step 2: Determine Delegation Strategy
 
@@ -69,7 +69,7 @@ For complex models: structure the plan so the main document provides high-level 
 
 ## Output
 
-Write to `plan/odd-generation-plan.md`. Create the `plan/` directory if it does not exist. Warn before overwriting existing files.
+Write to `lazyodd/plan/odd-generation-plan.md`. Create the `lazyodd/plan/` directory if it does not exist. Warn before overwriting existing files.
 
 The plan must follow this structure:
 
@@ -188,14 +188,14 @@ Inline citations: `[source: file.py:42]` or `[source: paper.pdf, p.7]` or `[sour
 [for simple models: "No sub-agents needed. Handle all sections directly."]
 
 ## Traceability Matrix
-The draft must also produce `draft/traceability-matrix.md` mapping every ODD claim to its source.
+The draft must also produce `lazyodd/draft/traceability-matrix.md` mapping every ODD claim to its source.
 Format:
 | ODD Section | Claim | Source | Confidence | Notes |
 |-------------|-------|--------|------------|-------|
 
 ## Output Specifications
-- Primary document: `draft/odd.md`
-- Traceability matrix: `draft/traceability-matrix.md`
+- Primary document: `lazyodd/draft/odd.md`
+- Traceability matrix: `lazyodd/draft/traceability-matrix.md`
 - Format: Markdown with inline citations and confidence annotations
 ```
 
@@ -203,4 +203,4 @@ After writing the plan, report to the user:
 - Total number of findings encoded
 - Any elements with thin coverage (few findings, low confidence)
 - Whether sub-agent delegation is recommended
-- Confirmation that the plan is ready for `/lazyodd:draft`
+- Confirmation that the plan is ready for `/draft`

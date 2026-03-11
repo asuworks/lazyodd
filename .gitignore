@@ -1,2 +1,4 @@
 .tldr/
 .tldrignore
+.claude/cache/
+.claude/tsc-cache/

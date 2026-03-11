@@ -20,24 +20,67 @@ claude --plugin-dir /path/to/lazyodd
 /plan                 # Phase 2: generation plan
 /draft                # Phase 3: ODD document
 /check                # Phase 4: verification
+/feedback             # Tell us how it went
 ```
 
 Review artifacts in `lazyodd/` between each phase.
 
-## How It Works
+## Skills
 
-The plugin provides 4 skills, each a separate agent session with human checkpoints between phases:
+The plugin has two audiences: **model developers** who generate ODDs, and **plugin developers** who improve lazyodd itself.
+
+### For model developers
+
+5 skills that run in order. Each is a separate agent session with human checkpoints between phases:
 
 | Phase | Skill | What happens | Output |
 |-------|-------|-------------|--------|
-| **Research** | `/interview` | Agent reviews files, interviews modeler | `lazyodd/research/findings.md` — structured by ODD element |
-| **Plan** | `/plan` | Agent creates standalone generation instructions | `lazyodd/plan/odd-generation-plan.md` — a "mega-prompt" |
+| **Research** | `/interview` | Agent reviews files, interviews modeler | `lazyodd/research/findings.md` |
+| **Plan** | `/plan` | Agent creates standalone generation instructions | `lazyodd/plan/odd-generation-plan.md` |
 | **Draft** | `/draft` | Fresh agent executes the plan | `lazyodd/draft/odd.md` + `lazyodd/draft/traceability-matrix.md` |
-| **Verify** | `/check` | Independent agent checks the ODD | `lazyodd/checked/verification-report.md` — scored rubric |
+| **Verify** | `/check` | Independent agent checks the ODD | `lazyodd/checked/verification-report.md` |
+| **Feedback** | `/feedback` | Interactive questionnaire about your experience | `lazyodd/feedback/{datetime}.md` |
 
 Human checkpoints between phases are intentional. You *want* to review the research findings before the agent plans, and review the plan before the agent drafts.
 
-### Why 4 phases?
+`/feedback` is optional but valuable. It takes ~2 minutes: mostly multiple-choice questions about what worked and what didn't, with a couple of optional free-text fields. Your feedback drives plugin improvements.
+
+### For plugin developers
+
+| Skill | What happens | Output |
+|-------|-------------|--------|
+| `/integrate-feedback` | Aggregates feedback reports, interviews the developer about priorities, generates a change plan | `lazyodd/suggested-changes/{datetime}.md` |
+
+`/integrate-feedback` reads all files in `lazyodd/feedback/`, counts patterns across them (weakest phases, most common issues, consistently weak ODD elements), presents the findings, then walks you through a structured interview to diagnose root causes and choose an improvement strategy. The output is a change plan with specific edits to skill files.
+
+The improvement loop: scientists run `/feedback` → developer runs `/integrate-feedback` → implement changes → repeat.
+
+### Improving your local installation
+
+You don't need to wait for upstream updates. After a few ODD generations, you can improve your own copy of the plugin:
+
+```bash
+# 1. You already have feedback from your ODD runs:
+ls my-model/lazyodd/feedback/
+# 2026-03-11T14-30-00.md
+# 2026-03-15T09-22-00.md
+
+# 2. Run integrate-feedback from your model directory:
+cd my-model
+claude --plugin-dir /path/to/lazyodd
+/integrate-feedback
+
+# 3. Review the suggested changes:
+cat lazyodd/suggested-changes/2026-03-16T10-00-00.md
+
+# 4. Apply the changes to your local plugin copy:
+#    The change plan targets specific skill files (e.g. skills/draft/SKILL.md)
+#    with before/after diffs you can apply manually or with agent help.
+```
+
+If you have multiple models, copy their `lazyodd/feedback/` files into one directory before running `/integrate-feedback` to get improvements based on all your experience.
+
+### Why separate phases?
 
 Don't generate in one shot. Each phase builds on the previous one's artifacts, and human review catches problems early:
 
@@ -45,6 +88,7 @@ Don't generate in one shot. Each phase builds on the previous one's artifacts, a
 - **Plan** encodes all gathered knowledge into a self-contained mega-prompt that a fresh agent can execute
 - **Draft** follows the plan precisely, producing an ODD with inline citations and confidence annotations
 - **Check** independently verifies the ODD against sources (it never sees the generation plan)
+- **Feedback** captures what worked and what didn't, so the plugin improves over time
 
 ## Key Design Decisions
 
@@ -150,7 +194,7 @@ This guide uses Claude Code and creates a Claude Code plugin, but the same inter
 - **Commit your interview transcript.** It documents why your process looks the way it does.
 - **Start with a known model** (Schelling, Wolf-Sheep) before tackling your research model.
 - **Don't skip verification.** The reimplementability check catches subtle omissions that look fine on first read.
-- **Feed failures back.** When the ODD gets something wrong, tell the agent *why* — it improves the process.
+- **Run `/feedback` after every generation.** It takes 2 minutes and drives plugin improvements. When the ODD gets something wrong, the structured feedback tells maintainers *what* and *where*.
 
 ## Agents Tested
 

@@ -1,0 +1,70 @@
+---
+session: general
+date: 2026-03-10
+status: complete
+outcome: SUCCEEDED
+---
+
+goal: Design a Claude Code plugin for generating ODD+2 protocols from ABM code and documentation
+now: Implement Task 6 (reference files) then Task 1 (plugin manifest) per plan/implementation-plan.md
+
+test: claude --plugin-dir ./lazyodd  # then try /lazyodd:interview
+
+done_this_session:
+  - task: Discovery interview — 10+ categories of questions to define requirements
+    files: []
+  - task: Full plugin specification with 4-phase workflow
+    files: [spec.md]
+  - task: Implementation plan with task breakdown and docs references
+    files: [plan/implementation-plan.md]
+  - task: GitHub issue documenting the interview approach for colleagues
+    files: [issue-interview-approach.md]
+  - task: Researched Claude Code plugin/skills docs for correct architecture
+    files: [plan/implementation-plan.md]
+  - task: Initial git commit
+    files: [.gitignore]
+
+blockers: []
+
+questions:
+  - Should odd-protocol-ref.md and odd-guidance-ref.md be verbatim copies from .devcontext/ or edited for agent consumption?
+  - How large can SKILL.md supporting files be before they cause context issues?
+
+decisions:
+  - skills_not_commands: Claude Code docs state commands/ is legacy; skills/ with SKILL.md is the standard
+  - 4_phase_workflow: interview → plan → draft → check, each a separate session with human checkpoints
+  - source_based_confidence: CODE_VERIFIED, DOC_STATED, MODELER_CONFIRMED, INFERRED, UNVERIFIABLE
+  - dual_traceability: inline citations in ODD text + separate traceability matrix document
+  - independent_verification: check skill does NOT see the generation plan, only ODD + source materials
+  - full_embed_via_supporting_files: ODD protocol and guidance bundled as supporting files per skill via ${CLAUDE_SKILL_DIR}
+  - no_hooks: trust user to run phases in order, keep it simple
+  - progressive_disclosure: mega-prompt starts high-level, draft agent reads detailed sections on demand for complex models
+  - configurable_odd_format: strict/extended/summary determined during interview phase
+  - disable_model_invocation: all 4 skills are user-triggered only
+
+findings:
+  - research_capabilities_first: Must research agent capabilities BEFORE the interview, not after. We designed around commands/ then discovered skills/ was correct — changed the plan significantly.
+  - skill_supporting_files: Skills can bundle reference files alongside SKILL.md, accessed via ${CLAUDE_SKILL_DIR}. Better than embedding 43k tokens directly in the prompt.
+  - skill_frontmatter: disable-model-invocation, allowed-tools, argument-hint, context:fork are all available
+  - reference_file_sizes: ODD protocol ~12k tokens, guidance ~31k tokens, prompt hierarchy ~3.7k tokens. Total ~47k per skill.
+
+worked:
+  - Discovery interview approach produced comprehensive, tailored specification
+  - Fetching actual plugin docs (WebFetch) before finalizing architecture
+  - Phase-organized directory structure (research/, plan/, draft/, checked/)
+
+failed:
+  - Initially planned commands/ directory — corrected after reading plugin docs
+
+next:
+  - "Task 6: Prepare odd-protocol-ref.md and odd-guidance-ref.md from .devcontext/ sources"
+  - "Task 1: Create .claude-plugin/plugin.json manifest"
+  - "Task 2: Build skills/interview/SKILL.md — the largest and most critical skill"
+  - "Task 3: Build skills/plan/SKILL.md"
+  - "Task 4: Build skills/draft/SKILL.md with bundled reference files"
+  - "Task 5: Build skills/check/SKILL.md with bundled reference files and allowed-tools restriction"
+  - Test full pipeline against a simple ABM (e.g., Schelling segregation)
+
+files:
+  created: [.gitignore, spec.md, plan/implementation-plan.md, issue-interview-approach.md]
+  modified: []

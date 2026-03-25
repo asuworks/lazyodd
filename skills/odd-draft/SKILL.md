@@ -1,25 +1,62 @@
 ---
-name: draft
-description: Execute an ODD generation plan to produce the complete ODD+2 protocol document and traceability matrix.
-disable-model-invocation: true
+name: odd-draft
+description: >
+  Execute an ODD generation plan to produce the complete ODD+2 protocol document
+  and traceability matrix. Invoke manually as part of the lazyodd workflow,
+  after /odd-plan.
+compatibility: Requires file reading and writing capabilities.
+metadata:
+  author: asuworks
+  version: "0.1.0"
+  claude-disable-model-invocation: "true"
 ---
 
 # ODD Document Drafter
 
 You are an ODD technical writer executing a generation plan to produce a complete ODD+2 protocol document. Your job is to follow the plan precisely while adhering to ODD+2 structural requirements.
 
+**IMMEDIATE EXECUTION**: When this skill is invoked, begin working immediately. Read the required files and start drafting — do not wait for additional user input.
+
 ## Setup
 
+START by reading these files now:
+
 1. Read these reference files for ODD+2 structure and requirements:
-   - `${CLAUDE_SKILL_DIR}/odd-protocol-ref.md` — ODD+2 protocol structure and rationale guidance
-   - `${CLAUDE_SKILL_DIR}/odd-guidance-ref.md` — element-by-element guidance and checklists
+   - `references/odd-protocol-ref.md` — ODD+2 protocol structure and rationale guidance
+   - `references/odd-guidance-ref.md` — element-by-element guidance and checklists
 
 2. Read the generation plan:
    - `lazyodd/plan/odd-generation-plan.md`
 
-If the plan file is missing, tell the user to run `/plan` first.
+If the plan file is missing, tell the user to run `/odd-plan` first. Otherwise, proceed immediately.
 
-3. Read all source materials listed in the plan's "Source Materials" section.
+3. Read the **Autonomy level** from the plan's Context section.
+
+4. Read all source materials listed in the plan's "Source Materials" section.
+
+## Autonomy-Adjusted Execution
+
+Read the autonomy level from the plan and adjust your execution style:
+
+**If Guided:**
+- Write ONE ODD section at a time
+- After each section, present it to the user and ask: "Does this section look correct? Any changes before I continue?"
+- Wait for explicit approval before proceeding to the next section
+- This means 7+ interaction rounds (one per element, more for complex models)
+
+**If Semi-autonomous:**
+- Write the COMPLETE ODD document in full
+- Present the entire document to the user for a single review pass
+- Ask: "Please review the full document. What changes are needed?"
+- Apply all requested changes in one round
+
+**If Autonomous:**
+- Write the COMPLETE ODD document in one pass with NO mid-process review
+- Mark uncertain content with `{INFERRED}` or `{UNVERIFIABLE}` confidence tags
+- Present the finished document with a summary of confidence distribution
+- The user reviews the final output on their own
+
+If no autonomy level is specified in the plan, default to **semi-autonomous**.
 
 ## Execution Protocol
 
@@ -213,4 +250,4 @@ After writing both files, report:
 - Total word count of the ODD
 - Number of claims by confidence category
 - Any sections where you had to use `{INFERRED}` or `{UNVERIFIABLE}` extensively
-- Whether the ODD is ready for `/check`
+- Whether the ODD is ready for `/odd-check`

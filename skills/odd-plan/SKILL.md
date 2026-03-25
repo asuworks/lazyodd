@@ -1,21 +1,38 @@
 ---
-name: plan
-description: Transform ODD research findings into a standalone mega-prompt that a fresh agent can execute to generate the full ODD document.
-disable-model-invocation: true
+name: odd-plan
+description: >
+  Transform ODD research findings into a standalone mega-prompt that a fresh
+  agent can execute to generate the full ODD document. Invoke manually as part
+  of the lazyodd workflow, after /odd-interview.
+compatibility: Requires file reading and writing capabilities.
+metadata:
+  author: asuworks
+  version: "0.1.0"
+  claude-disable-model-invocation: "true"
 ---
 
 # ODD Generation Plan Builder
 
 You are a prompt architect transforming research findings into a self-contained, executable generation plan. A fresh agent with zero prior context must be able to execute this plan to produce a complete ODD+2 document.
 
+**IMMEDIATE EXECUTION**: When this skill is invoked, begin working immediately. Read the input files and start building the plan — do not wait for additional user input.
+
 ## Inputs
 
-Read these files completely before proceeding:
+START by reading these files now:
 
 1. `lazyodd/research/findings.md` — structured research organized by ODD element
 2. `lazyodd/research/interview-log.md` — chronological record of modeler Q&A
 
-If either file is missing, tell the user to run `/interview` first.
+If either file is missing, tell the user to run `/odd-interview` first. Otherwise, proceed immediately to the next step.
+
+## Read Autonomy Level
+
+Check the `Autonomy Level` field in the Model Overview section of `lazyodd/research/findings.md`. This determines how the downstream `/odd-draft` and `/odd-check` skills should behave. You MUST embed this in the plan's Context section and adjust the plan's instructions accordingly:
+
+- **Guided**: The plan should instruct the draft agent to present each ODD section to the user for review before continuing to the next. Include explicit pause points.
+- **Semi-autonomous**: The plan should instruct the draft agent to generate the complete ODD, then present it as a whole for a single review pass.
+- **Autonomous**: The plan should instruct the draft agent to generate the complete ODD in one pass with no mid-process review. Mark uncertain content with `{INFERRED}` or `{UNVERIFIABLE}` confidence tags. The user will review the final output.
 
 ## Plan Design Principles
 
@@ -79,9 +96,8 @@ The plan must follow this structure:
 ## Instructions for the Drafting Agent
 
 You are an ODD technical writer. Execute this plan to produce a complete ODD+2 protocol
-document. Read these reference files before starting:
-- `${CLAUDE_SKILL_DIR}/odd-protocol-ref.md` — ODD+2 protocol structure
-- `${CLAUDE_SKILL_DIR}/odd-guidance-ref.md` — element guidance and checklists
+document. Read the ODD+2 protocol reference and guidance documents bundled with the /draft skill
+(references/odd-protocol-ref.md and references/odd-guidance-ref.md).
 
 Then read all source materials listed below and follow the section-by-section instructions.
 
@@ -92,6 +108,7 @@ Then read all source materials listed below and follow the section-by-section in
 - Model complexity: [simple/moderate/complex]
 - ODD format: [strict/extended/summary]
 - Input quality: [assessment]
+- Autonomy level: [guided/semi-autonomous/autonomous]
 
 ## Source Materials
 
@@ -183,6 +200,26 @@ Inline citations: `[source: file.py:42]` or `[source: paper.pdf, p.7]` or `[sour
 - Describe what the program does, not what you think the model does
 - Include rationale subsections where the modeler provided design rationale
 
+## Autonomy Instructions
+
+[Based on the autonomy level from the Context section above, include ONE of the following blocks:]
+
+### If Guided:
+Present each ODD section to the user for review before proceeding to the next section.
+After each section, ask: "Does this section look correct? Any changes before I continue?"
+Only proceed to the next section after explicit approval or correction.
+
+### If Semi-autonomous:
+Generate the complete ODD document in full, then present it to the user for a single review pass.
+After the complete draft, ask: "Please review the full document. What changes are needed?"
+Apply all requested changes in one round.
+
+### If Autonomous:
+Generate the complete ODD document in one pass. Do not pause for mid-process review.
+Mark any uncertain content with {INFERRED} or {UNVERIFIABLE} confidence tags.
+Present the finished document with a summary of confidence distribution.
+The user will review the final output on their own.
+
 ## Sub-agent Instructions
 [if applicable: what sub-agents to spawn, their specific tasks, tools to use]
 [for simple models: "No sub-agents needed. Handle all sections directly."]
@@ -203,4 +240,4 @@ After writing the plan, report to the user:
 - Total number of findings encoded
 - Any elements with thin coverage (few findings, low confidence)
 - Whether sub-agent delegation is recommended
-- Confirmation that the plan is ready for `/draft`
+- Confirmation that the plan is ready for `/odd-draft`

@@ -1,8 +1,16 @@
 ---
-name: interview
-description: Conduct a structured interview with a modeler to gather complete information for ODD+2 protocol generation from agent-based model code and documentation.
-disable-model-invocation: true
-argument-hint: [path/to/model/files]
+name: odd-interview
+description: >
+  Conduct a structured interview with a modeler to gather complete information
+  for ODD+2 protocol generation from agent-based model code and documentation.
+  Invoke manually as part of the lazyodd workflow. Accepts a path to model files
+  as an argument.
+compatibility: Requires structured user interaction (multiple-choice questions) and file reading.
+metadata:
+  author: asuworks
+  version: "0.1.0"
+  claude-disable-model-invocation: "true"
+  claude-argument-hint: "[path/to/model/files]"
 ---
 
 # ODD Research Interview
@@ -11,10 +19,22 @@ You are an ODD documentation expert conducting a human-in-the-loop research inte
 
 **Before starting**, read these reference files to understand the ODD+2 protocol structure and requirements:
 
-- Read `${CLAUDE_SKILL_DIR}/odd-protocol-ref.md` for ODD+2 structure, rationale guidance, and protocol overview
-- Read `${CLAUDE_SKILL_DIR}/odd-guidance-ref.md` for element-by-element guidance and checklists
+- Read `references/odd-protocol-ref.md` for ODD+2 structure, rationale guidance, and protocol overview
+- Read `references/odd-guidance-ref.md` for element-by-element guidance and checklists
 
-## Phase 0: Workflow Preferences
+## Phase 0: Discover Your Interaction Tools
+
+Before starting, determine how to present structured multiple-choice questions to the user. You MUST use your agent's structured interaction tool — do NOT fall back to plain text for multiple-choice questions.
+
+Known tools by agent:
+- **Claude Code**: `AskUserQuestion` — questions array with header, options (label + description), multiSelect
+- **Gemini CLI**: `ask_user` — questions array with header, options (label + description), multiSelect, type
+- **OpenCode**: `ask_user` or ask-user-questions MCP plugin
+- **Other agents**: Search your available tools for one that presents multiple-choice options to the user
+
+If no structured interaction tool is available, present numbered options in chat and ask the user to reply with their choice number. Always include an "Other" option for custom input. **Present ONE question at a time** — do not combine multiple questions into a single message. Wait for the user's answer before asking the next question. Number each question's options starting from 1.
+
+## Phase 1: Workflow Preferences
 
 Before scanning any files, ask the modeler about their preferences for this session:
 
@@ -31,11 +51,38 @@ Before scanning any files, ask the modeler about their preferences for this sess
 
 3. **Scope**: "Is there anything specific you want me to focus on or skip?"
 
-Record these preferences and adapt the interview accordingly throughout all phases.
+Record these preferences — especially the autonomy level — and adapt all subsequent phases accordingly.
 
-## Phase 1: File Inventory
+**Persist the autonomy choice**: The autonomy level MUST be written to the findings output (see Output section) so that downstream skills (`/plan`, `/draft`, `/check`) can read it and adjust their behavior.
 
-Scan all model files to build an inventory. If the user provided a path via `$ARGUMENTS`, start there. Otherwise, ask the user where the model files are located.
+## Autonomy-Adjusted Behavior
+
+Based on the autonomy level chosen above, adjust Phases 2-5 as follows:
+
+**If Guided (default):**
+- Follow all phases below as written — one question at a time, confirm each answer, maximum human input
+- Present all findings for verification before completing
+
+**If Semi-autonomous:**
+- Phases 2-3: Execute normally (scan files, assess complexity)
+- Phase 4: Read ALL files completely before asking any questions. Present a structured summary organized by ODD element of what you extracted. Identify specific gaps. Ask targeted questions ONLY about identified gaps — skip elements fully covered by code and documentation.
+- Phase 5: Same as guided
+
+**If Autonomous:**
+- Phases 2-3: Execute normally (scan files, assess complexity)
+- Phase 4: Read ALL files and extract as much as possible. Only ask questions about information truly unknowable from the sources:
+  - Modeler intent and design rationale (why this approach over alternatives?)
+  - Real-world justifications (what empirical data informed parameter choices?)
+  - Validation criteria (what counts as "correct" model behavior?)
+  - Known limitations or future plans the modeler wants documented
+- Mark everything extractable as `CODE_VERIFIED`, `DOC_STATED`, or `INFERRED` — do NOT ask about things you can determine from the files
+- Aim for **3-5 targeted questions maximum**, not 20+
+- Present complete findings for a single review pass at the end
+- Phase 5: Only ask if not already decided in Phase 1
+
+## Phase 2: File Inventory
+
+Scan all model files to build an inventory. If the user provided a file or directory path when invoking this skill, start there. Otherwise, ask the user where the model files are located.
 
 1. Use Glob and Read to inventory all files:
    - Source code (any language)
@@ -68,7 +115,7 @@ Scan all model files to build an inventory. If the user provided a path via `$AR
    | **Code only** | Source code with no separate documentation |
    | **Docs only** | Documentation without access to source code |
 
-## Phase 2: Complexity Assessment
+## Phase 3: Complexity Assessment
 
 After reviewing files, assess model complexity:
 
@@ -85,7 +132,7 @@ Classify as:
 
 Report the assessment to the user before proceeding to the interview.
 
-## Phase 3: Adaptive Interview
+## Phase 4: Adaptive Interview
 
 Select your interview strategy based on the input quality assessment:
 
@@ -105,7 +152,7 @@ Walk through each ODD element systematically. For each element:
 3. **Confirm your understanding** by restating what you've learned
 4. **Record the confidence level** for each finding
 
-Use `AskUserQuestion` for structured choices (e.g., selecting from options). Use conversational questions for open-ended topics (purpose, rationale, design decisions).
+Use your agent's structured interaction tool for multiple-choice questions (e.g., `AskUserQuestion` in Claude Code, `ask_user` in Gemini CLI). If no such tool is available, present numbered options and ask the user to reply with their choice. Use conversational questions for open-ended topics (purpose, rationale, design decisions).
 
 **Important rules:**
 - Ask one topic at a time. Do not overwhelm with multiple questions.
@@ -194,7 +241,7 @@ For each process identified in Element 3:
 - Are there alternative formulations that were considered?
 - What are the boundary conditions and edge cases?
 
-## Phase 4: ODD Format Configuration
+## Phase 5: ODD Format Configuration
 
 Based on the interview, determine the appropriate ODD format:
 
@@ -242,6 +289,7 @@ When the interview is complete, generate two files:
 - Name: [model name]
 - Authors: [authors]
 - Purpose: [1-2 sentence summary]
+- Autonomy Level: [guided / semi-autonomous / autonomous]
 - Input Sources: [list of files reviewed]
 - Input Quality Assessment: [code+docs / code+minimal-docs / code-only / docs-only]
 - Model Complexity: [simple / moderate / complex]
@@ -328,4 +376,4 @@ Create the `lazyodd/research/` directory if it does not exist. Warn the user bef
 After writing both files, summarize:
 - How many ODD elements have complete coverage
 - How many have partial coverage or open questions
-- Recommend whether the user should proceed to `/plan` or revisit gaps first
+- Recommend whether the user should proceed to `/odd-plan` or revisit gaps first

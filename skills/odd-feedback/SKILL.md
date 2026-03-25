@@ -1,15 +1,34 @@
 ---
-name: feedback
-description: Collect structured feedback from a scientist after ODD generation, producing a report to improve the plugin.
-disable-model-invocation: true
-allowed-tools: AskUserQuestion, Read, Write, Glob
+name: odd-feedback
+description: >
+  Collect structured feedback from a scientist after ODD generation, producing
+  a report to improve the plugin. Invoke manually after completing an ODD
+  generation workflow.
+compatibility: Requires structured user interaction (multiple-choice questions), file reading, and writing.
+allowed-tools: Read Write Glob
+metadata:
+  author: asuworks
+  version: "0.1.0"
+  claude-disable-model-invocation: "true"
 ---
 
 # ODD Generation Feedback
 
 You collect structured feedback from scientists who have just used lazyodd to generate an ODD. Your goal is to produce a concise feedback file that plugin maintainers can use to improve the workflow.
 
-Use `AskUserQuestion` for every question that can be structured as multiple choice. Only fall back to asking in chat for truly open-ended feedback.
+## Phase 0: Discover Your Interaction Tools
+
+Before starting, determine how to present structured multiple-choice questions to the user. You MUST use your agent's structured interaction tool — do NOT fall back to plain text for multiple-choice questions.
+
+Known tools by agent:
+- **Claude Code**: `AskUserQuestion` — questions array with header, options (label + description), multiSelect
+- **Gemini CLI**: `ask_user` — questions array with header, options (label + description), multiSelect, type
+- **OpenCode**: `ask_user` or ask-user-questions MCP plugin
+- **Other agents**: Search your available tools for one that presents multiple-choice options to the user
+
+If no structured interaction tool is available, present numbered options in chat and ask the user to reply with their choice number. Always include an "Other" option for custom input.
+
+Use your structured interaction tool for every question that can be structured as multiple choice. Only fall back to asking in chat for truly open-ended feedback.
 
 ## Tag Vocabularies
 
@@ -53,17 +72,17 @@ These are the fixed tag values used in frontmatter. When a user picks "Other" an
 Before starting, check that at least one phase has produced artifacts:
 
 ```
-lazyodd/research/findings.md      → /interview ran
-lazyodd/plan/odd-generation-plan.md → /plan ran
-lazyodd/draft/odd.md              → /draft ran
-lazyodd/checked/verification-report.md → /check ran
+lazyodd/research/findings.md      → /odd-interview ran
+lazyodd/plan/odd-generation-plan.md → /odd-plan ran
+lazyodd/draft/odd.md              → /odd-draft ran
+lazyodd/checked/verification-report.md → /odd-check ran
 ```
 
 Use Glob to check which exist. If none exist, tell the user to run the workflow first.
 
 ## Questionnaire Flow
 
-Run these AskUserQuestion calls in sequence. Each call groups related questions (max 4 per call).
+Run these structured interaction calls in sequence using your agent's interaction tool (see Phase 0). Each call groups related questions (max 4 per call).
 
 ### Call 1: Model Context
 
@@ -273,19 +292,19 @@ Question 2:
   header: "Weakest phase"
   multiSelect: false
   options:
-    - label: "/interview"
+    - label: "/odd-interview"
       description: "Research and interview quality"
-    - label: "/plan"
+    - label: "/odd-plan"
       description: "Generation plan accuracy"
-    - label: "/draft"
+    - label: "/odd-draft"
       description: "ODD document quality"
-    - label: "/check"
+    - label: "/odd-check"
       description: "Verification thoroughness"
 ```
 
 ### Final: Open-ended feedback
 
-After all structured questions, ask the user in chat (not via AskUserQuestion):
+After all structured questions, ask the user in chat (not via the structured interaction tool):
 
 > "Three optional free-text questions — one sentence each, or 'skip' to finish:
 > 1. **What was the single biggest problem?**

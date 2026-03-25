@@ -1,8 +1,15 @@
 ---
-name: integrate-feedback
-description: Analyze user feedback reports and conduct a structured interview with the plugin developer to plan concrete improvements to lazyodd skills.
-disable-model-invocation: true
-allowed-tools: AskUserQuestion, Read, Write, Glob, Grep
+name: odd-integrate-feedback
+description: >
+  Analyze user feedback reports and conduct a structured interview with the
+  plugin developer to plan concrete improvements to lazyodd skills. Invoke
+  manually when you have feedback reports to process.
+compatibility: Requires structured user interaction (multiple-choice questions), file reading, searching, and writing.
+allowed-tools: Read Write Glob Grep
+metadata:
+  author: asuworks
+  version: "0.1.0"
+  claude-disable-model-invocation: "true"
 ---
 
 # Feedback-Driven Plugin Improvement
@@ -10,6 +17,18 @@ allowed-tools: AskUserQuestion, Read, Write, Glob, Grep
 You help a plugin developer improve lazyodd by analyzing scientist feedback and conducting a structured interview to prioritize and plan changes.
 
 Your audience is the **plugin developer**, not the scientist. You speak in terms of skill files, prompts, tag vocabularies, and workflow design.
+
+## Phase 0: Discover Your Interaction Tools
+
+Before starting, determine how to present structured multiple-choice questions to the user. You MUST use your agent's structured interaction tool — do NOT fall back to plain text for multiple-choice questions.
+
+Known tools by agent:
+- **Claude Code**: `AskUserQuestion` — questions array with header, options (label + description), multiSelect
+- **Gemini CLI**: `ask_user` — questions array with header, options (label + description), multiSelect, type
+- **OpenCode**: `ask_user` or ask-user-questions MCP plugin
+- **Other agents**: Search your available tools for one that presents multiple-choice options to the user
+
+If no structured interaction tool is available, present numbered options in chat and ask the user to reply with their choice number. Always include an "Other" option for custom input.
 
 ## Step 1: Collect Feedback Files
 
@@ -20,7 +39,7 @@ lazyodd/feedback/*.md
 **/lazyodd/feedback/*.md
 ```
 
-If no feedback files are found, tell the developer to have scientists run `/feedback` first.
+If no feedback files are found, tell the developer to have scientists run `/odd-feedback` first.
 
 Read all found files. Parse each file's YAML frontmatter into structured data.
 
@@ -69,7 +88,7 @@ Present the aggregated data to the developer as a briefing before starting the i
 
 ## Step 4: Developer Interview
 
-Conduct a structured interview with the developer using AskUserQuestion. The questions adapt based on the aggregated findings.
+Conduct a structured interview with the developer using your agent's structured interaction tool (see Phase 0). The questions adapt based on the aggregated findings.
 
 ### Call 1: Scope & Priority
 
@@ -324,8 +343,8 @@ After implementing changes, re-run the plugin on a test model and check:
 - [ ] Review this plan
 - [ ] Implement changes (manually or with agent assistance)
 - [ ] Test on a model
-- [ ] Collect new feedback with `/feedback`
-- [ ] Run `/integrate-feedback` again to measure improvement
+- [ ] Collect new feedback with `/odd-feedback`
+- [ ] Run `/odd-integrate-feedback` again to measure improvement
 ```
 
 ### Specific-edits plan
@@ -356,4 +375,4 @@ After writing the change plan, summarize for the developer:
 - Path to the change plan file
 - Number of changes proposed
 - Which feedback tags are addressed vs. which remain unaddressed
-- Suggested next action: "Review the plan, then implement changes or run `/integrate-feedback` again after the next batch of feedback"
+- Suggested next action: "Review the plan, then implement changes or run `/odd-integrate-feedback` again after the next batch of feedback"

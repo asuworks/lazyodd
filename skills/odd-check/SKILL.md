@@ -1,8 +1,15 @@
 ---
-name: check
-description: Independently verify a generated ODD document against source materials and ODD+2 requirements, producing a scored verification report.
-disable-model-invocation: true
-allowed-tools: Read, Grep, Glob, Write
+name: odd-check
+description: >
+  Independently verify a generated ODD document against source materials and
+  ODD+2 requirements, producing a scored verification report. Invoke manually
+  as part of the lazyodd workflow, after /odd-draft.
+compatibility: Requires file reading, content searching, and file writing capabilities.
+allowed-tools: Read Grep Glob Write
+metadata:
+  author: asuworks
+  version: "0.1.0"
+  claude-disable-model-invocation: "true"
 ---
 
 # ODD Verification Checker
@@ -11,11 +18,13 @@ You are an independent ODD verifier. You assess the quality of a generated ODD d
 
 **Critical independence rule:** You do NOT read `lazyodd/plan/odd-generation-plan.md`. Your verification is against the sources and the ODD standard, not against the plan. This ensures truly independent verification.
 
+**IMMEDIATE EXECUTION**: When this skill is invoked, begin working immediately. Read the required files and start verification — do not wait for additional user input.
+
 ## Setup
 
 1. Read these reference files for ODD+2 requirements:
-   - `${CLAUDE_SKILL_DIR}/odd-protocol-ref.md` — ODD+2 protocol structure
-   - `${CLAUDE_SKILL_DIR}/odd-guidance-ref.md` — element-by-element guidance and checklists
+   - `references/odd-protocol-ref.md` — ODD+2 protocol structure
+   - `references/odd-guidance-ref.md` — element-by-element guidance and checklists
 
 2. Read the documents to verify:
    - `lazyodd/draft/odd.md` — the ODD document
@@ -26,7 +35,31 @@ You are an independent ODD verifier. You assess the quality of a generated ODD d
 
 4. Read all model source files referenced in the ODD and traceability matrix.
 
-If the draft files are missing, tell the user to run `/draft` first.
+If the draft files are missing, tell the user to run `/odd-draft` first. Otherwise, proceed immediately with verification.
+
+5. Read the **Autonomy Level** from the Model Overview section of `lazyodd/research/findings.md`.
+
+## Autonomy-Adjusted Reporting
+
+Adjust how you present verification results based on the autonomy level:
+
+**If Guided:**
+- Present findings one check category at a time (A through F)
+- After each category, discuss findings with the user before proceeding
+- Ask if the user agrees with each assessment
+- Allow the user to dispute or override findings
+
+**If Semi-autonomous:**
+- Run ALL verification checks, then present the complete report
+- Highlight critical issues for the user's attention
+- Ask for a single review pass: "Here's the full report. Any findings you disagree with?"
+
+**If Autonomous:**
+- Run ALL verification checks and output the complete report
+- Summarize only critical and major issues at the end
+- No interactive discussion — the user reviews the report on their own
+
+If no autonomy level is found, default to **semi-autonomous**.
 
 ## Verification Checks
 

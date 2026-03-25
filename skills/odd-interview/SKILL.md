@@ -27,6 +27,7 @@ You are an ODD documentation expert conducting a human-in-the-loop research inte
 Before starting, determine how to present structured multiple-choice questions to the user. You MUST use your agent's structured interaction tool — do NOT fall back to plain text for multiple-choice questions.
 
 Known tools by agent:
+
 - **Claude Code**: `AskUserQuestion` — questions array with header, options (label + description), multiSelect
 - **Gemini CLI**: `ask_user` — questions array with header, options (label + description), multiSelect, type
 - **OpenCode**: `ask_user` or ask-user-questions MCP plugin
@@ -60,15 +61,18 @@ Record these preferences — especially the autonomy level — and adapt all sub
 Based on the autonomy level chosen above, adjust Phases 2-5 as follows:
 
 **If Guided (default):**
+
 - Follow all phases below as written — one question at a time, confirm each answer, maximum human input
 - Present all findings for verification before completing
 
 **If Semi-autonomous:**
+
 - Phases 2-3: Execute normally (scan files, assess complexity)
 - Phase 4: Read ALL files completely before asking any questions. Present a structured summary organized by ODD element of what you extracted. Identify specific gaps. Ask targeted questions ONLY about identified gaps — skip elements fully covered by code and documentation.
 - Phase 5: Same as guided
 
 **If Autonomous:**
+
 - Phases 2-3: Execute normally (scan files, assess complexity)
 - Phase 4: Read ALL files and extract as much as possible. Only ask questions about information truly unknowable from the sources:
   - Modeler intent and design rationale (why this approach over alternatives?)
@@ -91,6 +95,7 @@ Scan all model files to build an inventory. If the user provided a file or direc
    - Comments and docstrings within code
 
 2. Present the inventory to the user:
+
    ```
    I found the following model files:
 
@@ -108,12 +113,12 @@ Scan all model files to build an inventory. If the user provided a file or direc
 
 3. Assess input quality:
 
-   | Category | Criteria |
-   |----------|----------|
+   | Category                      | Criteria                                                           |
+   | ----------------------------- | ------------------------------------------------------------------ |
    | **Code + comprehensive docs** | Source code AND detailed documentation (papers, extensive READMEs) |
-   | **Code + minimal docs** | Source code with only basic comments/README |
-   | **Code only** | Source code with no separate documentation |
-   | **Docs only** | Documentation without access to source code |
+   | **Code + minimal docs**       | Source code with only basic comments/README                        |
+   | **Code only**                 | Source code with no separate documentation                         |
+   | **Docs only**                 | Documentation without access to source code                        |
 
 ## Phase 3: Complexity Assessment
 
@@ -126,6 +131,7 @@ After reviewing files, assess model complexity:
 - **Temporal structure**: Discrete time steps, events, continuous time?
 
 Classify as:
+
 - **Simple**: 1-3 entity types, fewer than 5 submodels
 - **Moderate**: 3-10 entity types, 5-15 submodels
 - **Complex**: 10+ entity types or 15+ submodels
@@ -136,12 +142,12 @@ Report the assessment to the user before proceeding to the interview.
 
 Select your interview strategy based on the input quality assessment:
 
-| Input Quality | Strategy |
-|---------------|----------|
-| **Code + comprehensive docs** | **Gap-driven** — Extract what you can from code and docs first, then only ask about gaps, ambiguities, and design rationale |
-| **Code + minimal docs** | **Conceptual-first** — Ask the modeler to explain the model's purpose and narrative, then verify your code understanding against their explanation |
-| **Code only** | **Reverse-engineer** — Present your understanding of the code to the modeler for confirmation, correction, and elaboration |
-| **Docs only** | **Deep interrogation** — Probe for precise process logic, parameters, scheduling, and decision rules that documentation typically omits |
+| Input Quality                 | Strategy                                                                                                                                           |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Code + comprehensive docs** | **Gap-driven** — Extract what you can from code and docs first, then only ask about gaps, ambiguities, and design rationale                        |
+| **Code + minimal docs**       | **Conceptual-first** — Ask the modeler to explain the model's purpose and narrative, then verify your code understanding against their explanation |
+| **Code only**                 | **Reverse-engineer** — Present your understanding of the code to the modeler for confirmation, correction, and elaboration                         |
+| **Docs only**                 | **Deep interrogation** — Probe for precise process logic, parameters, scheduling, and decision rules that documentation typically omits            |
 
 ### Interview Protocol
 
@@ -155,6 +161,7 @@ Walk through each ODD element systematically. For each element:
 Use your agent's structured interaction tool for multiple-choice questions (e.g., `AskUserQuestion` in Claude Code, `ask_user` in Gemini CLI). If no such tool is available, present numbered options and ask the user to reply with their choice. Use conversational questions for open-ended topics (purpose, rationale, design decisions).
 
 **Important rules:**
+
 - Ask one topic at a time. Do not overwhelm with multiple questions.
 - Listen carefully to answers. Ask follow-up questions when answers are vague.
 - Use the modeler's exact terminology. Never paraphrase technical terms.
@@ -235,6 +242,7 @@ For each of the 11 design concepts, ask whether it applies and how:
 #### Element 7: Submodels
 
 For each process identified in Element 3:
+
 - What is the exact logic? (equations, algorithms, decision rules)
 - What are all parameters, their names, symbols, units, default values, and ranges?
 - Where do parameter values come from? (literature, calibration, assumption?)
@@ -246,11 +254,13 @@ For each process identified in Element 3:
 Based on the interview, determine the appropriate ODD format:
 
 Ask the modeler:
+
 - What is the documentation purpose? (journal publication, internal documentation, replication archive?)
 - Is there a target journal or venue with specific requirements?
 - How detailed should the ODD be?
 
 Then recommend one of:
+
 - **Strict ODD+2**: Follows Grimm et al. 2020 exactly — for journal publication or formal documentation
 - **ODD+2 with extensions**: Standard sections + additional metadata (design rationale per element, uncertainty analysis) — for comprehensive documentation
 - **Summary ODD**: Abbreviated narrative version — for journal article body text (with full ODD as supplement)
@@ -259,13 +269,13 @@ Then recommend one of:
 
 Tag every finding with a confidence level:
 
-| Category | Meaning | Evidence Standard |
-|----------|---------|-------------------|
-| `CODE_VERIFIED` | Verified by reading actual code | Specific file:line reference |
-| `DOC_STATED` | Explicitly stated in documentation | Specific document:page/section reference |
-| `MODELER_CONFIRMED` | Confirmed by modeler during interview | Interview question reference |
-| `INFERRED` | Reasonably inferred but not explicitly stated | Inference chain documented |
-| `UNVERIFIABLE` | Cannot be verified from available sources | Reason stated |
+| Category            | Meaning                                       | Evidence Standard                        |
+| ------------------- | --------------------------------------------- | ---------------------------------------- |
+| `CODE_VERIFIED`     | Verified by reading actual code               | Specific file:line reference             |
+| `DOC_STATED`        | Explicitly stated in documentation            | Specific document:page/section reference |
+| `MODELER_CONFIRMED` | Confirmed by modeler during interview         | Interview question reference             |
+| `INFERRED`          | Reasonably inferred but not explicitly stated | Inference chain documented               |
+| `UNVERIFIABLE`      | Cannot be verified from available sources     | Reason stated                            |
 
 ## Quality Rules
 
@@ -286,6 +296,7 @@ When the interview is complete, generate two files:
 # ODD Research Findings
 
 ## Model Overview
+
 - Name: [model name]
 - Authors: [authors]
 - Purpose: [1-2 sentence summary]
@@ -296,53 +307,89 @@ When the interview is complete, generate two files:
 - ODD Format Decision: [strict / extended / summary]
 
 ## Element 1: Purpose and Patterns
+
 ### Findings
+
 [what was learned]
+
 ### Sources
+
 [specific file:line or document:section references]
+
 ### Confidence
+
 [confidence category for each finding]
+
 ### Open Questions
+
 [anything still unclear]
 
 ## Element 2: Entities, State Variables, and Scales
+
 [same structure]
 
 ## Element 3: Process Overview and Scheduling
+
 [same structure]
 
 ## Element 4: Design Concepts
+
 ### 4.1 Basic principles
+
 [findings, sources, confidence, open questions]
+
 ### 4.2 Emergence
+
 [same]
+
 ### 4.3 Adaptation
+
 [same]
+
 ### 4.4 Objectives
+
 [same]
+
 ### 4.5 Learning
+
 [same]
+
 ### 4.6 Prediction
+
 [same]
+
 ### 4.7 Sensing
+
 [same]
+
 ### 4.8 Interaction
+
 [same]
+
 ### 4.9 Stochasticity
+
 [same]
+
 ### 4.10 Collectives
+
 [same]
+
 ### 4.11 Observation
+
 [same]
 
 ## Element 5: Initialization
+
 [same structure]
 
 ## Element 6: Input Data
+
 [same structure]
 
 ## Element 7: Submodels
+
 ### Submodel: [name]
+
 [findings, sources, confidence, open questions]
 [repeat for each submodel]
 ```
@@ -353,6 +400,7 @@ When the interview is complete, generate two files:
 # Interview Log
 
 ## Session Information
+
 - Date: [date]
 - Model: [model name]
 - Modeler: [name/role]
@@ -362,11 +410,13 @@ When the interview is complete, generate two files:
 ## Questions and Responses
 
 ### Q1: [question asked]
+
 **Response:** [modeler's response, preserving exact wording]
 **ODD Element:** [which element this informs]
 **Confidence:** [resulting confidence category]
 
 ### Q2: [question asked]
+
 [same structure]
 [continue for all questions]
 ```
@@ -374,6 +424,7 @@ When the interview is complete, generate two files:
 Create the `lazyodd/research/` directory if it does not exist. Warn the user before overwriting existing files.
 
 After writing both files, summarize:
+
 - How many ODD elements have complete coverage
 - How many have partial coverage or open questions
 - Recommend whether the user should proceed to `/odd-plan` or revisit gaps first

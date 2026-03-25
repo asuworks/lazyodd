@@ -36,24 +36,27 @@ You are an independent ODD verifier. You assess the quality of a generated ODD d
 
 If the draft files are missing, tell the user to run `/odd-draft` first. Otherwise, proceed immediately with verification.
 
-5. Read the **Autonomy Level** from the Model Overview section of `lazyodd/research/findings.md`.
+1. Read the **Autonomy Level** from the Model Overview section of `lazyodd/research/findings.md`.
 
 ## Autonomy-Adjusted Reporting
 
 Adjust how you present verification results based on the autonomy level:
 
 **If Guided:**
+
 - Present findings one check category at a time (A through F)
 - After each category, discuss findings with the user before proceeding
 - Ask if the user agrees with each assessment
 - Allow the user to dispute or override findings
 
 **If Semi-autonomous:**
+
 - Run ALL verification checks, then present the complete report
 - Highlight critical issues for the user's attention
 - Ask for a single review pass: "Here's the full report. Any findings you disagree with?"
 
 **If Autonomous:**
+
 - Run ALL verification checks and output the complete report
 - Summarize only critical and major issues at the end
 - No interactive discussion — the user reviews the report on their own
@@ -115,6 +118,7 @@ For each mismatch found, record the ODD claim, the code location, and what the c
 For each ODD element, ask: "Could a competent modeler rebuild this aspect of the model from the ODD alone?"
 
 Specific checks:
+
 - [ ] All parameters specified with values or ranges (no unnamed or unvalued parameters)
 - [ ] All decision rules precisely defined with exact conditions and outcomes
 - [ ] Equations are complete with all variables defined
@@ -137,13 +141,13 @@ Specific checks:
 
 Score each ODD element on 4 dimensions (1-5 scale):
 
-| Score | Completeness | Precision | Traceability | Consistency |
-|-------|-------------|-----------|--------------|-------------|
-| **1** | Major gaps, missing topics | Vague prose, no specifics | No sources cited | Contradictions with other sections |
-| **2** | Some topics missing | Some specifics but many ambiguities | Few sources, mostly uncited | Some inconsistencies |
-| **3** | All required topics present | Specific but some ambiguity remains | Most claims sourced | Minor inconsistencies only |
-| **4** | Comprehensive coverage | Precise with minor gaps | Nearly all claims traced with confidence | Consistent with rare exceptions |
-| **5** | Comprehensive with nuance and rationale | Pseudocode/equations, fully unambiguous | Every claim traced with confidence category | Fully internally consistent |
+| Score | Completeness                            | Precision                               | Traceability                                | Consistency                        |
+| ----- | --------------------------------------- | --------------------------------------- | ------------------------------------------- | ---------------------------------- |
+| **1** | Major gaps, missing topics              | Vague prose, no specifics               | No sources cited                            | Contradictions with other sections |
+| **2** | Some topics missing                     | Some specifics but many ambiguities     | Few sources, mostly uncited                 | Some inconsistencies               |
+| **3** | All required topics present             | Specific but some ambiguity remains     | Most claims sourced                         | Minor inconsistencies only         |
+| **4** | Comprehensive coverage                  | Precise with minor gaps                 | Nearly all claims traced with confidence    | Consistent with rare exceptions    |
+| **5** | Comprehensive with nuance and rationale | Pseudocode/equations, fully unambiguous | Every claim traced with confidence category | Fully internally consistent        |
 
 ## Issue Classification
 
@@ -170,18 +174,19 @@ Write to `lazyodd/checked/verification-report.md`. Create the `lazyodd/checked/`
 
 ## Scores by Element
 
-| Element | Completeness | Precision | Traceability | Consistency | Overall |
-|---------|-------------|-----------|--------------|-------------|---------|
-| 1. Purpose and Patterns | | | | | |
-| 2. Entities, State Variables, and Scales | | | | | |
-| 3. Process Overview and Scheduling | | | | | |
-| 4. Design Concepts | | | | | |
-| 5. Initialization | | | | | |
-| 6. Input Data | | | | | |
-| 7. Submodels | | | | | |
-| **Average** | | | | | |
+| Element                                  | Completeness | Precision | Traceability | Consistency | Overall |
+| ---------------------------------------- | ------------ | --------- | ------------ | ----------- | ------- |
+| 1. Purpose and Patterns                  |              |           |              |             |         |
+| 2. Entities, State Variables, and Scales |              |           |              |             |         |
+| 3. Process Overview and Scheduling       |              |           |              |             |         |
+| 4. Design Concepts                       |              |           |              |             |         |
+| 5. Initialization                        |              |           |              |             |         |
+| 6. Input Data                            |              |           |              |             |         |
+| 7. Submodels                             |              |           |              |             |         |
+| **Average**                              |              |           |              |             |         |
 
 ### Grading Scale
+
 - **A** (4.5-5.0): Publication-ready, minor polish only
 - **B** (3.5-4.4): Good quality, some improvements needed
 - **C** (2.5-3.4): Adequate but significant gaps
@@ -213,21 +218,27 @@ Write to `lazyodd/checked/verification-report.md`. Create the `lazyodd/checked/`
 ## Verification Details
 
 ### A. Structural Completeness: [PASS / PARTIAL / FAIL]
+
 [checklist results and details]
 
 ### B. Source Traceability: [PASS / PARTIAL / FAIL]
+
 [checklist results, citation verification sample results]
 
 ### C. Semantic Consistency: [PASS / PARTIAL / FAIL]
+
 [checklist results, specific inconsistencies found]
 
 ### D. Code Alignment: [PASS / PARTIAL / FAIL / N/A]
+
 [checklist results, specific mismatches found]
 
 ### E. Reimplementability: [PASS / PARTIAL / FAIL]
+
 [assessment with specific gaps identified]
 
 ### F. Confidence Audit: [PASS / PARTIAL / FAIL]
+
 [audit results, misclassified claims]
 
 ## Recommendations
@@ -242,6 +253,7 @@ Write to `lazyodd/checked/verification-report.md`. Create the `lazyodd/checked/`
 ## Completion
 
 After writing the report, summarize for the user:
+
 - Overall grade and what it means
 - Number of critical / major / minor issues
 - Top 3 most impactful improvements to make

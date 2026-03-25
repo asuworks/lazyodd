@@ -50,6 +50,7 @@ The plan you produce must be:
 ### Step 1: Assess Completeness
 
 Review `lazyodd/research/findings.md` for gaps:
+
 - Are all 7 ODD elements covered?
 - Are all 11 design concepts addressed?
 - Are there open questions that should have been resolved?
@@ -61,11 +62,11 @@ If there are critical gaps (missing elements, unresolved conflicts), warn the us
 
 Based on model complexity (recorded in findings):
 
-| Complexity | Strategy |
-|------------|----------|
-| **Simple** (1-3 entity types, <5 submodels) | Single agent handles entire ODD |
-| **Moderate** (3-10 entity types, 5-15 submodels) | Main agent + code analysis sub-agent for Element 7 |
-| **Complex** (10+ types or 15+ submodels) | Main agent coordinates sub-agents: code analyzer for submodels, domain specialist for design concepts |
+| Complexity                                       | Strategy                                                                                              |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| **Simple** (1-3 entity types, <5 submodels)      | Single agent handles entire ODD                                                                       |
+| **Moderate** (3-10 entity types, 5-15 submodels) | Main agent + code analysis sub-agent for Element 7                                                    |
+| **Complex** (10+ types or 15+ submodels)         | Main agent coordinates sub-agents: code analyzer for submodels, domain specialist for design concepts |
 
 ### Step 3: Construct the Plan
 
@@ -74,6 +75,7 @@ Build the mega-prompt with all sections below. Every piece of knowledge from the
 ### Step 4: Encode Terminology
 
 Extract all domain-specific terms from the research findings and interview log. Create an explicit terminology table in the plan with:
+
 - The exact term to use
 - Terms to avoid (common paraphrases that would be incorrect)
 - Definition in the model's context
@@ -118,65 +120,97 @@ Read these files before drafting:
 ## Terminology
 
 | Term | Use This | NOT This | Definition |
-|------|----------|----------|------------|
+| ---- | -------- | -------- | ---------- |
+
 [terminology table]
 
 ## Knowledge Base
 
 ### Element 1: Purpose and Patterns
+
 [all findings for this element, with source citations]
 [specific instructions on what to write]
 
 ### Element 2: Entities, State Variables, and Scales
+
 [all findings, with source citations]
 [specific instructions: entity table format, state variable lists, scale specifications]
 
 ### Element 3: Process Overview and Scheduling
+
 [all findings, with source citations]
 [specific instructions: exact execution order, scheduling diagram format]
 
 ### Element 4: Design Concepts
+
 #### 4.1 Basic principles
+
 [findings and instructions]
+
 #### 4.2 Emergence
+
 [findings and instructions]
+
 #### 4.3 Adaptation
+
 [findings and instructions]
+
 #### 4.4 Objectives
+
 [findings and instructions]
+
 #### 4.5 Learning
+
 [findings and instructions]
+
 #### 4.6 Prediction
+
 [findings and instructions]
+
 #### 4.7 Sensing
+
 [findings and instructions]
+
 #### 4.8 Interaction
+
 [findings and instructions]
+
 #### 4.9 Stochasticity
+
 [findings and instructions]
+
 #### 4.10 Collectives
+
 [findings and instructions]
+
 #### 4.11 Observation
+
 [findings and instructions]
 
 ### Element 5: Initialization
+
 [all findings, with source citations]
 [specific instructions: initial values, spatial setup, variation between runs]
 
 ### Element 6: Input Data
+
 [all findings, with source citations]
 [specific instructions on external data description]
 
 ### Element 7: Submodels
+
 #### Submodel: [name]
+
 [all findings, equations, pseudocode, parameters with values/ranges/units/sources]
 [repeat for each submodel]
 
 ## Quality Standards
 
 ### Reimplementability
+
 A competent modeler who has never seen the code must be able to reimplement the model
 from the ODD alone. This means:
+
 - All parameters specified with values, units, and ranges
 - All decision rules precisely defined with exact conditions and outcomes
 - All equations written in LaTeX notation
@@ -184,7 +218,9 @@ from the ODD alone. This means:
 - All boundary conditions and edge cases addressed
 
 ### Confidence Annotations
+
 Tag every factual claim with one of:
+
 - `{CODE_VERIFIED}` — verified by reading actual code [file:line]
 - `{DOC_STATED}` — explicitly stated in documentation [doc:section]
 - `{MODELER_CONFIRMED}` — confirmed by modeler during interview [interview Q#]
@@ -192,9 +228,11 @@ Tag every factual claim with one of:
 - `{UNVERIFIABLE}` — cannot be verified [reason]
 
 ### Citation Format
+
 Inline citations: `[source: file.py:42]` or `[source: paper.pdf, p.7]` or `[source: interview Q12]`
 
 ### Writing Rules
+
 - Use exact terminology from the Terminology table
 - Never paraphrase technical concepts into simpler language
 - Describe what the program does, not what you think the model does
@@ -205,38 +243,45 @@ Inline citations: `[source: file.py:42]` or `[source: paper.pdf, p.7]` or `[sour
 [Based on the autonomy level from the Context section above, include ONE of the following blocks:]
 
 ### If Guided:
+
 Present each ODD section to the user for review before proceeding to the next section.
 After each section, ask: "Does this section look correct? Any changes before I continue?"
 Only proceed to the next section after explicit approval or correction.
 
 ### If Semi-autonomous:
+
 Generate the complete ODD document in full, then present it to the user for a single review pass.
 After the complete draft, ask: "Please review the full document. What changes are needed?"
 Apply all requested changes in one round.
 
 ### If Autonomous:
+
 Generate the complete ODD document in one pass. Do not pause for mid-process review.
 Mark any uncertain content with {INFERRED} or {UNVERIFIABLE} confidence tags.
 Present the finished document with a summary of confidence distribution.
 The user will review the final output on their own.
 
 ## Sub-agent Instructions
+
 [if applicable: what sub-agents to spawn, their specific tasks, tools to use]
 [for simple models: "No sub-agents needed. Handle all sections directly."]
 
 ## Traceability Matrix
+
 The draft must also produce `lazyodd/draft/traceability-matrix.md` mapping every ODD claim to its source.
 Format:
 | ODD Section | Claim | Source | Confidence | Notes |
 |-------------|-------|--------|------------|-------|
 
 ## Output Specifications
+
 - Primary document: `lazyodd/draft/odd.md`
 - Traceability matrix: `lazyodd/draft/traceability-matrix.md`
 - Format: Markdown with inline citations and confidence annotations
 ```
 
 After writing the plan, report to the user:
+
 - Total number of findings encoded
 - Any elements with thin coverage (few findings, low confidence)
 - Whether sub-agent delegation is recommended

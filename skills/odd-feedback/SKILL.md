@@ -20,6 +20,7 @@ You collect structured feedback from scientists who have just used lazyodd to ge
 Before starting, determine how to present structured multiple-choice questions to the user. You MUST use your agent's structured interaction tool — do NOT fall back to plain text for multiple-choice questions.
 
 Known tools by agent:
+
 - **Claude Code**: `AskUserQuestion` — questions array with header, options (label + description), multiSelect
 - **Gemini CLI**: `ask_user` — questions array with header, options (label + description), multiSelect, type
 - **OpenCode**: `ask_user` or ask-user-questions MCP plugin
@@ -34,30 +35,35 @@ Use your structured interaction tool for every question that can be structured a
 These are the fixed tag values used in frontmatter. When a user picks "Other" and provides custom text, map it to the closest tag or add it with an `other:` prefix (e.g. `other:scheduling_issues`).
 
 ### Interview Issues
+
 - `too_many_rounds` — Asked more questions than necessary
 - `missed_key_topics` — Failed to ask about important model aspects
 - `redundant_questions` — Asked things already obvious from code or docs
 - `too_vague` — Questions were too broad to answer usefully
 
 ### Draft Issues (used in Call 5)
+
 - `vague_process_descriptions` — Process logic described in prose instead of precise rules
 - `wrong_parameter_values` — Parameter values don't match code or docs
 - `missing_submodels` — Submodels omitted or incomplete
 - `poor_pseudocode` — Pseudocode/equations unclear or absent
 
 ### Check Issues (used in Call 5)
+
 - `false_positives` — Flagged things that were actually correct
 - `missed_real_issues` — Failed to catch genuine problems
 - `shallow_verification` — Checks were superficial, didn't trace to sources
 - `inconsistent_scoring` — Scores didn't match the issues found
 
 ### Edit Types
+
 - `factual_corrections` — Wrong parameter values, incorrect process descriptions
 - `missing_content` — Added sections or details the draft omitted
 - `tone_wording` — Rewrote for clarity or scientific style
 - `structural` — Reorganized sections or moved content between elements
 
 ### ODD Elements
+
 - `1_purpose` — Purpose and Patterns
 - `2_entities` — Entities, State Variables, and Scales
 - `3_process_overview` — Process Overview and Scheduling
@@ -306,6 +312,7 @@ Question 2:
 After all structured questions, ask the user in chat (not via the structured interaction tool):
 
 > "Three optional free-text questions — one sentence each, or 'skip' to finish:
+>
 > 1. **What was the single biggest problem?**
 > 2. **What worked better than expected?**
 > 3. **Suggested fix for the weakest phase?** (e.g. 'Interview should ask about boundary conditions earlier')"
@@ -358,42 +365,42 @@ Map the grouped options from Call 5 to individual element tags:
 
 ## Model Context
 
-| Field | Value |
-|-------|-------|
-| Complexity | [from Call 1 Q1] |
+| Field           | Value            |
+| --------------- | ---------------- |
+| Complexity      | [from Call 1 Q1] |
 | Inputs provided | [from Call 1 Q2] |
 
 ## Phase Ratings
 
-| Phase | Rating | Notes |
-|-------|--------|-------|
-| /interview — adaptation | [Call 2 Q1] | |
-| /interview — issues | [Call 2 Q2, comma-separated] | |
-| /plan — intent match | [Call 3 Q1] | |
-| /draft — reimplementable | [Call 3 Q2] | |
-| /draft — confidence accuracy | [Call 3 Q3] | |
-| /check — traceability useful | [Call 4 Q1] | |
-| /check — caught real issues | [Call 4 Q2] | |
+| Phase                        | Rating                       | Notes |
+| ---------------------------- | ---------------------------- | ----- |
+| /interview — adaptation      | [Call 2 Q1]                  |       |
+| /interview — issues          | [Call 2 Q2, comma-separated] |       |
+| /plan — intent match         | [Call 3 Q1]                  |       |
+| /draft — reimplementable     | [Call 3 Q2]                  |       |
+| /draft — confidence accuracy | [Call 3 Q3]                  |       |
+| /check — traceability useful | [Call 4 Q1]                  |       |
+| /check — caught real issues  | [Call 4 Q2]                  |       |
 
 ## Edit Details
 
-| Field | Value |
-|-------|-------|
-| Manual edits needed | [Call 4 Q3] |
-| Edit types | [Call 5 Q1, comma-separated] |
+| Field               | Value                        |
+| ------------------- | ---------------------------- |
+| Manual edits needed | [Call 4 Q3]                  |
+| Edit types          | [Call 5 Q1, comma-separated] |
 
 ## ODD Element Quality
 
-| Weak | Strong |
-|------|--------|
+| Weak                         | Strong                       |
+| ---------------------------- | ---------------------------- |
 | [Call 5 Q2, comma-separated] | [Call 5 Q3, comma-separated] |
 
 ## Overall
 
-| Field | Value |
-|-------|-------|
+| Field           | Value       |
+| --------------- | ----------- |
 | Would use again | [Call 6 Q1] |
-| Weakest phase | [Call 6 Q2] |
+| Weakest phase   | [Call 6 Q2] |
 
 ## Open Feedback
 

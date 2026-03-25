@@ -22,6 +22,7 @@ Your audience is the **plugin developer**, not the scientist. You speak in terms
 Before starting, determine how to present structured multiple-choice questions to the user. You MUST use your agent's structured interaction tool — do NOT fall back to plain text for multiple-choice questions.
 
 Known tools by agent:
+
 - **Claude Code**: `AskUserQuestion` — questions array with header, options (label + description), multiSelect
 - **Gemini CLI**: `ask_user` — questions array with header, options (label + description), multiSelect, type
 - **OpenCode**: `ask_user` or ask-user-questions MCP plugin
@@ -48,18 +49,19 @@ Build a summary from the frontmatter fields across all reports. For each field, 
 
 **Compute these aggregates:**
 
-| Metric | How |
-|--------|-----|
-| Weakest phase | Most frequent `weakest_phase` value |
-| Top interview issues | Most frequent tags in `interview_issues` |
-| Top edit types | Most frequent tags in `edit_types` |
-| Consistently weak elements | Elements appearing in `weak_elements` across multiple reports |
+| Metric                       | How                                                             |
+| ---------------------------- | --------------------------------------------------------------- |
+| Weakest phase                | Most frequent `weakest_phase` value                             |
+| Top interview issues         | Most frequent tags in `interview_issues`                        |
+| Top edit types               | Most frequent tags in `edit_types`                              |
+| Consistently weak elements   | Elements appearing in `weak_elements` across multiple reports   |
 | Consistently strong elements | Elements appearing in `strong_elements` across multiple reports |
-| Reuse willingness | Distribution of `would_reuse` values |
-| Edit severity | Distribution of `edits_needed` values |
-| Reimplementability | Distribution of `reimplementable` values |
+| Reuse willingness            | Distribution of `would_reuse` values                            |
+| Edit severity                | Distribution of `edits_needed` values                           |
+| Reimplementability           | Distribution of `reimplementable` values                        |
 
 **Also collect:**
+
 - All "Suggested Fixes" lines, grouped by phase
 - All "Biggest problem" free-text entries
 - All "Best surprise" free-text entries
@@ -126,6 +128,7 @@ Question 2:
 Based on the focus area chosen in Call 1, ask targeted questions about that phase. Read the relevant skill file before asking.
 
 **If focus is /interview:**
+
 ```
 Question 1:
   question: "The top interview issue is '{top_issue}'. What's the likely root cause?"
@@ -157,6 +160,7 @@ Question 2:
 ```
 
 **If focus is /plan:**
+
 ```
 Question 1:
   question: "Plans aren't matching user intent. What should change?"
@@ -174,6 +178,7 @@ Question 1:
 ```
 
 **If focus is /draft:**
+
 ```
 Question 1:
   question: "Users report '{top_edit_type}' as the main edit needed. What should change in the draft skill?"
@@ -205,6 +210,7 @@ Question 2:
 ```
 
 **If focus is /check:**
+
 ```
 Question 1:
   question: "Verification has '{top_check_issue}'. What should change?"
@@ -222,6 +228,7 @@ Question 1:
 ```
 
 **If focus is Cross-cutting or Quick wins:**
+
 ```
 Question 1:
   question: "Which cross-cutting improvement would help most?"
@@ -312,6 +319,7 @@ status: proposed
 [Description of the change at the chosen detail level]
 
 ### Change 2: [Title]
+
 ...
 
 ## User Suggestions Incorporated
@@ -357,9 +365,11 @@ Use the same structure as above, but for each change include a before/after diff
 **Addresses:** [feedback tags]
 
 **Before:**
+
 > [exact current text from the skill file]
 
 **After:**
+
 > [proposed replacement text]
 
 **Why:** [one sentence connecting this edit to the feedback pattern]

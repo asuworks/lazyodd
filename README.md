@@ -13,37 +13,50 @@ Compatible with any agent that supports the [Agent Skills](https://agentskills.i
 
 ## Quick Start
 
-### Claude Code (plugin install)
+### Install
 
 ```bash
-# From your model's directory:
-claude --plugin-dir /path/to/lazyodd
+# Install to your project (all detected agents):
+npx skills add asuworks/lazyodd
 
-# Then invoke the skills in order:
-/lazyodd:odd-interview .  # Phase 1: research + interview
-/lazyodd:odd-plan         # Phase 2: generation plan
-/lazyodd:odd-draft        # Phase 3: ODD document
-/lazyodd:odd-check        # Phase 4: verification
-/lazyodd:odd-feedback     # Tell us how it went
+# Install to specific agents:
+npx skills add asuworks/lazyodd -a claude-code -a codex
+
+# Install globally (available across all projects):
+npx skills add asuworks/lazyodd -g
 ```
 
-### Any AgentSkills-compatible agent
+Requires [skills CLI](https://github.com/vercel-labs/skills). Works with Claude Code, Codex, Cursor, GitHub Copilot, OpenCode, Gemini CLI, and [many more](https://github.com/vercel-labs/skills#available-agents).
+
+### Run
 
 ```bash
-# Copy the skills into your project or user skills directory:
-cp -r /path/to/lazyodd/skills/* .agents/skills/
-
-# Then invoke skills by name in your agent:
-/odd-interview .
-/odd-plan
-/odd-draft
-/odd-check
-/odd-feedback
+# Invoke skills in order:
+/odd-interview .   # Phase 1: research + interview
+/odd-plan          # Phase 2: generation plan
+/odd-draft         # Phase 3: ODD document
+/odd-check         # Phase 4: verification
+/odd-feedback      # Tell us how it went
 ```
-
-Some agents use `.<agent-name>/skills/` instead of `.agents/skills/` — check your agent's documentation.
 
 Review artifacts in `lazyodd/` between each phase.
+
+#### Claude Code (plugin install)
+
+Claude Code also supports direct plugin loading without the skills CLI:
+
+```bash
+claude --plugin-dir /path/to/lazyodd
+
+# Skills are then namespaced:
+/lazyodd:odd-interview .
+/lazyodd:odd-plan
+# etc.
+```
+
+#### Gemini CLI note
+
+Gemini CLI loads skills as passive context. After installation, tell Gemini to execute the skill explicitly (e.g., "run the odd-interview skill on the current directory").
 
 ### Why the `odd-` prefix?
 
@@ -81,25 +94,22 @@ The improvement loop: scientists run `/odd-feedback` → developer runs `/odd-in
 
 ### Improving your local installation
 
-You don't need to wait for upstream updates. After a few ODD generations, you can improve your own copy of the plugin:
+Read through the SKILL.md files and adjust them to your liking — they're plain markdown, so you can tweak prompts, add domain-specific instructions, or change the interview questions directly.
+
+For a more structured approach, use the feedback → integrate-feedback mechanism:
 
 ```bash
-# 1. You already have feedback from your ODD runs:
-ls my-model/lazyodd/feedback/
-# 2026-03-11T14-30-00.md
-# 2026-03-15T09-22-00.md
+# 1. After each ODD generation, run feedback:
+/odd-feedback
 
-# 2. Run integrate-feedback from your model directory:
-cd my-model
-claude --plugin-dir /path/to/lazyodd
+# 2. Once you have a few feedback reports:
+ls my-model/lazyodd/feedback/
+
+# 3. Run integrate-feedback to analyze patterns and generate a change plan:
 /odd-integrate-feedback
 
-# 3. Review the suggested changes:
+# 4. Review and apply the suggested changes:
 cat lazyodd/suggested-changes/2026-03-16T10-00-00.md
-
-# 4. Apply the changes to your local plugin copy:
-#    The change plan targets specific skill files (e.g. skills/odd-draft/SKILL.md)
-#    with before/after diffs you can apply manually or with agent help.
 ```
 
 If you have multiple models, copy their `lazyodd/feedback/` files into one directory before running `/odd-integrate-feedback` to get improvements based on all your experience.
@@ -153,9 +163,13 @@ The research phase adapts based on what's available:
 
 The verification agent does NOT see the generation plan — only the ODD and the original source materials. This ensures truly independent verification against the sources, not just checking whether the plan was followed.
 
-## Building Your Own
+---
 
-This plugin was itself built through an interview process. You can use the same approach to create a fully customized ODD generation pipeline for any agent platform.
+## Creating Your Own Skill Pack
+
+> Everything above is about **using** lazyodd. Everything below is about how lazyodd was **made** — and how you can use the same approach to create skill packs for any domain.
+
+These skills were built through an agent-driven interview process. You give the agent reference materials and a goal, then it interviews you until it has enough context to design the full workflow.
 
 ### The interview approach
 
@@ -210,7 +224,7 @@ The interview forces the agent to build deep context before generating anything.
 
 ## Caveats
 
-This guide uses Claude Code and creates a Claude Code plugin, but the same interview approach can be used to create a solution for any agent platform. The key is the interview process that generates a custom solution based on your needs and the agent's capabilities.
+The example above uses Claude Code, but the same interview approach works with any agent. The key is the interview process that generates a custom solution based on your needs and the agent's capabilities.
 
 ## Tips
 
@@ -225,8 +239,11 @@ This guide uses Claude Code and creates a Claude Code plugin, but the same inter
 | Agent | Notes |
 |-------|-------|
 | Claude Code (Opus) | Strong code analysis, good at structured interviews, handles large context |
-| GitHub Copilot (VS Code) | Native `.github/skills/` support, picks up skills automatically |
-| Gemini CLI | Native `ask_user` tool works with structured interaction, extension system available |
+| GitHub Copilot (VS Code) | Picks up skills automatically |
+| Gemini CLI | Works with explicit prompting; loads skills as passive context |
+| OpenCode | Full skill support |
+| OpenAI Codex | Works well; presents multi-choice as flat numbered lists |
+| pi.dev | Full skill support via `.agents/skills/` |
 | *More coming* | PRs welcome with your experience reports |
 
 ## Related Links

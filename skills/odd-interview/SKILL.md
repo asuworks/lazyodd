@@ -5,11 +5,11 @@ description: >
   for ODD+2 protocol generation from agent-based model code and documentation.
   Invoke manually as part of the lazyodd workflow. Accepts a path to model files
   as an argument.
+license: MIT
 compatibility: Requires structured user interaction (multiple-choice questions) and file reading.
 metadata:
   author: asuworks
   version: "0.1.0"
-  claude-disable-model-invocation: "true"
   claude-argument-hint: "[path/to/model/files]"
 ---
 

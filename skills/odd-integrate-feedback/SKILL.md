@@ -4,12 +4,11 @@ description: >
   Analyze user feedback reports and conduct a structured interview with the
   plugin developer to plan concrete improvements to lazyodd skills. Invoke
   manually when you have feedback reports to process.
+license: MIT
 compatibility: Requires structured user interaction (multiple-choice questions), file reading, searching, and writing.
-allowed-tools: Read Write Glob Grep
 metadata:
   author: asuworks
   version: "0.1.0"
-  claude-disable-model-invocation: "true"
 ---
 
 # Feedback-Driven Plugin Improvement

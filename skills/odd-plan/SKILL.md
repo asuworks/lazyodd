@@ -4,11 +4,11 @@ description: >
   Transform ODD research findings into a standalone mega-prompt that a fresh
   agent can execute to generate the full ODD document. Invoke manually as part
   of the lazyodd workflow, after /odd-interview.
+license: MIT
 compatibility: Requires file reading and writing capabilities.
 metadata:
   author: asuworks
   version: "0.1.0"
-  claude-disable-model-invocation: "true"
 ---
 
 # ODD Generation Plan Builder

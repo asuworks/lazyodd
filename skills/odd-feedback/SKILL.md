@@ -4,12 +4,11 @@ description: >
   Collect structured feedback from a scientist after ODD generation, producing
   a report to improve the plugin. Invoke manually after completing an ODD
   generation workflow.
+license: MIT
 compatibility: Requires structured user interaction (multiple-choice questions), file reading, and writing.
-allowed-tools: Read Write Glob
 metadata:
   author: asuworks
   version: "0.1.0"
-  claude-disable-model-invocation: "true"
 ---
 
 # ODD Generation Feedback

@@ -4,11 +4,11 @@ description: >
   Execute an ODD generation plan to produce the complete ODD+2 protocol document
   and traceability matrix. Invoke manually as part of the lazyodd workflow,
   after /odd-plan.
+license: MIT
 compatibility: Requires file reading and writing capabilities.
 metadata:
   author: asuworks
   version: "0.1.0"
-  claude-disable-model-invocation: "true"
 ---
 
 # ODD Document Drafter

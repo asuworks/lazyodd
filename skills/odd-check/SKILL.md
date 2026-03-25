@@ -4,12 +4,11 @@ description: >
   Independently verify a generated ODD document against source materials and
   ODD+2 requirements, producing a scored verification report. Invoke manually
   as part of the lazyodd workflow, after /odd-draft.
+license: MIT
 compatibility: Requires file reading, content searching, and file writing capabilities.
-allowed-tools: Read Grep Glob Write
 metadata:
   author: asuworks
   version: "0.1.0"
-  claude-disable-model-invocation: "true"
 ---
 
 # ODD Verification Checker

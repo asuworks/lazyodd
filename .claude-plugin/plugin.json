@@ -1,8 +1,8 @@
 {
-  "name": "lazyodd",
+  "name": "odder",
   "description": "Generate complete ODD+2 protocol documents from agent-based model code and documentation",
   "version": "0.1.0",
   "author": {
-    "name": "ASU Works"
+    "name": "@asuworks"
   }
 }

@@ -3,7 +3,7 @@ name: odd-check
 description: >
   Independently verify a generated ODD document against source materials and
   ODD+2 requirements, producing a scored verification report. Invoke manually
-  as part of the lazyodd workflow, after /odd-draft.
+  as part of the odder workflow, after /odd-draft.
 license: MIT
 compatibility: Requires file reading, content searching, and file writing capabilities.
 metadata:
@@ -15,7 +15,7 @@ metadata:
 
 You are an independent ODD verifier. You assess the quality of a generated ODD document by checking it against the source materials (code and documentation) and the ODD+2 protocol requirements.
 
-**Critical independence rule:** You do NOT read `lazyodd/plan/odd-generation-plan.md`. Your verification is against the sources and the ODD standard, not against the plan. This ensures truly independent verification.
+**Critical independence rule:** You do NOT read `odder/plan/odd-generation-plan.md`. Your verification is against the sources and the ODD standard, not against the plan. This ensures truly independent verification.
 
 **IMMEDIATE EXECUTION**: When this skill is invoked, begin working immediately. Read the required files and start verification — do not wait for additional user input.
 
@@ -26,17 +26,17 @@ You are an independent ODD verifier. You assess the quality of a generated ODD d
    - `references/odd-guidance-ref.md` — element-by-element guidance and checklists
 
 2. Read the documents to verify:
-   - `lazyodd/draft/odd.md` — the ODD document
-   - `lazyodd/draft/traceability-matrix.md` — the source mapping
+   - `odder/draft/odd.md` — the ODD document
+   - `odder/draft/traceability-matrix.md` — the source mapping
 
 3. Read the research findings (for cross-checking, NOT as a substitute for independent verification):
-   - `lazyodd/research/findings.md`
+   - `odder/research/findings.md`
 
 4. Read all model source files referenced in the ODD and traceability matrix.
 
 If the draft files are missing, tell the user to run `/odd-draft` first. Otherwise, proceed immediately with verification.
 
-1. Read the **Autonomy Level** from the Model Overview section of `lazyodd/research/findings.md`.
+1. Read the **Autonomy Level** from the Model Overview section of `odder/research/findings.md`.
 
 ## Autonomy-Adjusted Reporting
 
@@ -159,13 +159,13 @@ Classify every issue found:
 
 ## Output
 
-Write to `lazyodd/checked/verification-report.md`. Create the `lazyodd/checked/` directory if it does not exist. Warn before overwriting existing files.
+Write to `odder/checked/verification-report.md`. Create the `odder/checked/` directory if it does not exist. Warn before overwriting existing files.
 
 ```markdown
 # ODD Verification Report: [Model Name]
 
-> Verified by lazyodd:check | Date: [date]
-> ODD Document: lazyodd/draft/odd.md
+> Verified by odder:check | Date: [date]
+> ODD Document: odder/draft/odd.md
 > Overall Grade: [A/B/C/D/F]
 
 ## Summary

@@ -3,7 +3,7 @@ name: odd-interview
 description: >
   Conduct a structured interview with a modeler to gather complete information
   for ODD+2 protocol generation from agent-based model code and documentation.
-  Invoke manually as part of the lazyodd workflow. Accepts a path to model files
+  Invoke manually as part of the odder workflow. Accepts a path to model files
   as an argument.
 license: MIT
 compatibility: Requires structured user interaction (multiple-choice questions) and file reading.
@@ -290,7 +290,7 @@ Tag every finding with a confidence level:
 
 When the interview is complete, generate two files:
 
-### `lazyodd/research/findings.md`
+### `odder/research/findings.md`
 
 ```markdown
 # ODD Research Findings
@@ -394,7 +394,7 @@ When the interview is complete, generate two files:
 [repeat for each submodel]
 ```
 
-### `lazyodd/research/interview-log.md`
+### `odder/research/interview-log.md`
 
 ```markdown
 # Interview Log
@@ -421,7 +421,7 @@ When the interview is complete, generate two files:
 [continue for all questions]
 ```
 
-Create the `lazyodd/research/` directory if it does not exist. Warn the user before overwriting existing files.
+Create the `odder/research/` directory if it does not exist. Warn the user before overwriting existing files.
 
 After writing both files, summarize:
 

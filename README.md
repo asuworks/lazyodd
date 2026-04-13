@@ -1,4 +1,4 @@
-# lazyodd
+# odder
 
 Agent skills that generate complete ODD+2 protocol documents from agent-based model code and documentation. 4-phase, human-in-the-loop workflow designed to preserve author's intent.
 
@@ -8,13 +8,13 @@ Compatible with any agent that supports the [Agent Skills](https://agentskills.i
 
 ```bash
 # Install to your project:
-npx skills add asuworks/lazyodd
+npx skills add comses/odder
 
 # Install to specific agents:
-npx skills add asuworks/lazyodd -a claude-code -a codex
+npx skills add comses/odder -a claude-code -a codex
 
 # Install globally:
-npx skills add asuworks/lazyodd -g
+npx skills add comses/odder -g
 ```
 
 Requires [Node.js](https://nodejs.org) (`npx` runs the [skills CLI](https://github.com/vercel-labs/skills) automatically).
@@ -29,19 +29,19 @@ Requires [Node.js](https://nodejs.org) (`npx` runs the [skills CLI](https://gith
 /odd-feedback      # Optional: tell us how it went
 ```
 
-Review artifacts in `lazyodd/` between each phase.
+Review artifacts in `odder/` between each phase.
 
 ## Skills
 
 ### For model developers
 
-| Phase        | Skill            | What happens                               | Output                                                          |
-| ------------ | ---------------- | ------------------------------------------ | --------------------------------------------------------------- |
-| **Research** | `/odd-interview` | Agent reviews files, interviews modeler    | `lazyodd/research/findings.md`                                  |
-| **Plan**     | `/odd-plan`      | Creates standalone generation instructions | `lazyodd/plan/odd-generation-plan.md`                           |
-| **Draft**    | `/odd-draft`     | Fresh agent executes the plan              | `lazyodd/draft/odd.md` + `lazyodd/draft/traceability-matrix.md` |
-| **Verify**   | `/odd-check`     | Independent agent checks the ODD           | `lazyodd/checked/verification-report.md`                        |
-| **Feedback** | `/odd-feedback`  | Interactive questionnaire (~2 min)         | `lazyodd/feedback/{datetime}.md`                                |
+| Phase        | Skill            | What happens                               | Output                                                      |
+| ------------ | ---------------- | ------------------------------------------ | ----------------------------------------------------------- |
+| **Research** | `/odd-interview` | Agent reviews files, interviews modeler    | `odder/research/findings.md`                                |
+| **Plan**     | `/odd-plan`      | Creates standalone generation instructions | `odder/plan/odd-generation-plan.md`                         |
+| **Draft**    | `/odd-draft`     | Fresh agent executes the plan              | `odder/draft/odd.md` + `odder/draft/traceability-matrix.md` |
+| **Verify**   | `/odd-check`     | Independent agent checks the ODD           | `odder/checked/verification-report.md`                      |
+| **Feedback** | `/odd-feedback`  | Interactive questionnaire (~2 min)         | `odder/feedback/{datetime}.md`                              |
 
 Each phase builds on the previous one's artifacts, and human review between phases catches problems early.
 
@@ -84,9 +84,9 @@ The verification agent does NOT see the generation plan — only the ODD and ori
 
 ### For SKILL developers
 
-| Skill                     | What happens                                                     | Output                                    |
-| ------------------------- | ---------------------------------------------------------------- | ----------------------------------------- |
-| `/odd-integrate-feedback` | Aggregates feedback, interviews developer, generates change plan | `lazyodd/suggested-changes/{datetime}.md` |
+| Skill                     | What happens                                                     | Output                                  |
+| ------------------------- | ---------------------------------------------------------------- | --------------------------------------- |
+| `/odd-integrate-feedback` | Aggregates feedback, interviews developer, generates change plan | `odder/suggested-changes/{datetime}.md` |
 
 The improvement loop: scientists run `/odd-feedback` → developer runs `/odd-integrate-feedback` → implement changes → repeat.
 

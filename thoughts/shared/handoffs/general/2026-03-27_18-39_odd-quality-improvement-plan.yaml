@@ -5,15 +5,15 @@ status: complete
 outcome: SUCCEEDED
 ---
 
-goal: Research and plan improvements to make lazyodd-generated ODDs publication-quality and indistinguishable from human-written ones
+goal: Research and plan improvements to make odder-generated ODDs publication-quality and indistinguishable from human-written ones
 now: Implement Phase 1 skill prompt improvements (9 changes across SKILL.md files, no tooling dependencies)
 test: "diff IMPROVEMENT-PLAN.md /dev/null # plan exists; no code changes to test yet"
 
 done_this_session:
-  - task: Read all 6 lazyodd skills and 2 ODD+2 reference files to understand the full system
+  - task: Read all 6 odder skills and 2 ODD+2 reference files to understand the full system
     files: [skills/odd-interview/SKILL.md, skills/odd-plan/SKILL.md, skills/odd-draft/SKILL.md, skills/odd-check/SKILL.md, skills/odd-feedback/SKILL.md, skills/odd-integrate-feedback/SKILL.md]
-  - task: Read both human-written ODD (CHIME ABM ODD.docx.pdf, 20 pages) and lazyodd-generated ODD (chime-abm/lazyodd/draft/odd.md, 931 lines) for direct comparison
-    files: ["../chime-abm/CHIME ABM ODD.docx.pdf", ../chime-abm/lazyodd/draft/odd.md]
+  - task: Read both human-written ODD (CHIME ABM ODD.docx.pdf, 20 pages) and odder-generated ODD (chime-abm/odder/draft/odd.md, 931 lines) for direct comparison
+    files: ["../chime-abm/CHIME ABM ODD.docx.pdf", ../chime-abm/odder/draft/odd.md]
   - task: Conducted structured interview with user (3 rounds of AskUserQuestion) to establish requirements
     files: []
   - task: Launched 3 oracle research agents in parallel for citations, diagrams, and equations
@@ -33,12 +33,12 @@ decisions:
   - pandoc_as_backbone: "All dual-format (Markdown + LaTeX/PDF) output routes through Pandoc. The ODD stays in Markdown as source of truth. Pandoc --citeproc handles citations, pandoc-ext/diagram handles diagrams, native $...$ handles equations."
   - mermaid_primary_diagrams: "Mermaid for flowcharts/ER/sequence (widest platform support, GitHub-native rendering), Graphviz DOT for network topology diagrams only."
   - crossref_plus_citation_js: "CrossRef API (free, no auth) for DOI resolution + Citation.js CLI for formatting. Skip Zotero MCP (requires user library), SOMEF (wrong tool), codemeticulous (immature)."
-  - equations_are_prompting_fix: "The CHIME lazyodd ODD already HAS equations in LaTeX. The gap is numbered equations with cross-references (eq. 1, eq. 2), not extraction. Low-complexity fix via \\tag{N} in draft skill."
+  - equations_are_prompting_fix: "The CHIME odder ODD already HAS equations in LaTeX. The gap is numbered equations with cross-references (eq. 1, eq. 2), not extraction. Low-complexity fix via \\tag{N} in draft skill."
   - preserve_unique_strengths: "Confidence annotations, inline source references, knowledge gap documentation, traceability matrix are BETTER than human ODDs. Do not change these."
   - multi_agent_equal: "All improvements must work across Claude Code, Copilot, Gemini CLI, OpenCode, Codex via vercel-labs/skills standard. No agent-specific features."
 
 findings:
-  - lazyodd_already_strong_on_equations: "Contrary to feedback, the generated ODD has LaTeX equations with $$...$$ notation. The gap is numbered equations (eq. 1, 2, 3) with cross-references, not extraction."
+  - odder_already_strong_on_equations: "Contrary to feedback, the generated ODD has LaTeX equations with $$...$$ notation. The gap is numbered equations (eq. 1, 2, 3) with cross-references, not extraction."
   - human_odd_has_4_figures: "Model interface screenshot, conceptual model flowchart (Figure 2), network visualization (Figure 3), risk function curve (Figure 4). All absent from generated ODD."
   - citation_gap_is_bibliography_not_inline: "Generated ODD references papers by name inline (Grimm et al. 2020) but has only 5 entries in References vs. 10+ in human ODD, and missing journal/volume/pages/DOI details."
   - visual_odd_vodd: "JASSS 2024 published Visual ODD (vODD) - standardized ABM visualization template with fixed positions for ODD elements. Templates on GitHub. Should inform diagram layout."
@@ -60,7 +60,7 @@ next:
   - "Phase 3: Create odd-core.bib, add Pandoc citation key format to odd-draft, add citation resolution to odd-plan"
   - "Phase 4: Create /odd-compile skill for Pandoc pipeline (PDF/LaTeX output)"
   - "Phase 5: Update odd-feedback with diagram/citation/equation quality questions"
-  - "Test: Re-run lazyodd on CHIME ABM after Phase 1+2+3 to compare improvement"
+  - "Test: Re-run odder on CHIME ABM after Phase 1+2+3 to compare improvement"
 
 files:
   created: [IMPROVEMENT-PLAN.md, thoughts/shared/handoffs/general/2026-03-27_18-39_odd-quality-improvement-plan.yaml]

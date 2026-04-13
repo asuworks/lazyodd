@@ -8,7 +8,7 @@ outcome: SUCCEEDED
 goal: Design a Claude Code plugin for generating ODD+2 protocols from ABM code and documentation
 now: Implement Task 6 (reference files) then Task 1 (plugin manifest) per plan/implementation-plan.md
 
-test: claude --plugin-dir ./lazyodd  # then try /lazyodd:interview
+test: claude --plugin-dir ./odder  # then try /odder:interview
 
 done_this_session:
   - task: Discovery interview — 10+ categories of questions to define requirements

@@ -3,7 +3,7 @@ name: odd-plan
 description: >
   Transform ODD research findings into a standalone mega-prompt that a fresh
   agent can execute to generate the full ODD document. Invoke manually as part
-  of the lazyodd workflow, after /odd-interview.
+  of the odder workflow, after /odd-interview.
 license: MIT
 compatibility: Requires file reading and writing capabilities.
 metadata:
@@ -21,14 +21,14 @@ You are a prompt architect transforming research findings into a self-contained,
 
 START by reading these files now:
 
-1. `lazyodd/research/findings.md` — structured research organized by ODD element
-2. `lazyodd/research/interview-log.md` — chronological record of modeler Q&A
+1. `odder/research/findings.md` — structured research organized by ODD element
+2. `odder/research/interview-log.md` — chronological record of modeler Q&A
 
 If either file is missing, tell the user to run `/odd-interview` first. Otherwise, proceed immediately to the next step.
 
 ## Read Autonomy Level
 
-Check the `Autonomy Level` field in the Model Overview section of `lazyodd/research/findings.md`. This determines how the downstream `/odd-draft` and `/odd-check` skills should behave. You MUST embed this in the plan's Context section and adjust the plan's instructions accordingly:
+Check the `Autonomy Level` field in the Model Overview section of `odder/research/findings.md`. This determines how the downstream `/odd-draft` and `/odd-check` skills should behave. You MUST embed this in the plan's Context section and adjust the plan's instructions accordingly:
 
 - **Guided**: The plan should instruct the draft agent to present each ODD section to the user for review before continuing to the next. Include explicit pause points.
 - **Semi-autonomous**: The plan should instruct the draft agent to generate the complete ODD, then present it as a whole for a single review pass.
@@ -49,7 +49,7 @@ The plan you produce must be:
 
 ### Step 1: Assess Completeness
 
-Review `lazyodd/research/findings.md` for gaps:
+Review `odder/research/findings.md` for gaps:
 
 - Are all 7 ODD elements covered?
 - Are all 11 design concepts addressed?
@@ -88,7 +88,7 @@ For complex models: structure the plan so the main document provides high-level 
 
 ## Output
 
-Write to `lazyodd/plan/odd-generation-plan.md`. Create the `lazyodd/plan/` directory if it does not exist. Warn before overwriting existing files.
+Write to `odder/plan/odd-generation-plan.md`. Create the `odder/plan/` directory if it does not exist. Warn before overwriting existing files.
 
 The plan must follow this structure:
 
@@ -268,15 +268,15 @@ The user will review the final output on their own.
 
 ## Traceability Matrix
 
-The draft must also produce `lazyodd/draft/traceability-matrix.md` mapping every ODD claim to its source.
+The draft must also produce `odder/draft/traceability-matrix.md` mapping every ODD claim to its source.
 Format:
 | ODD Section | Claim | Source | Confidence | Notes |
 |-------------|-------|--------|------------|-------|
 
 ## Output Specifications
 
-- Primary document: `lazyodd/draft/odd.md`
-- Traceability matrix: `lazyodd/draft/traceability-matrix.md`
+- Primary document: `odder/draft/odd.md`
+- Traceability matrix: `odder/draft/traceability-matrix.md`
 - Format: Markdown with inline citations and confidence annotations
 ```
 

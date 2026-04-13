@@ -1,11 +1,11 @@
-# LazyODD Implementation Plan
+# odder Implementation Plan
 
 ## Overview
 
 Build a Claude Code plugin with 4 skills and supporting reference files.
 
 ```
-lazyodd/
+odder/
 ├── .claude-plugin/
 │   └── plugin.json                  # Task 1 (trivial)
 ├── skills/
@@ -64,7 +64,7 @@ disable-model-invocation: true
 
 ```json
 {
-  "name": "lazyodd",
+  "name": "odder",
   "description": "Generate complete ODD+2 protocol documents from agent-based model code and documentation",
   "version": "0.1.0",
   "author": {
@@ -73,7 +73,7 @@ disable-model-invocation: true
 }
 ```
 
-### Task 2: `/lazyodd:interview` skill
+### Task 2: `/odder:interview` skill
 **File**: `skills/interview/SKILL.md`
 **Effort**: Large (biggest prompt — sets the tone for everything)
 **Frontmatter**: `disable-model-invocation: true`, `argument-hint: [path/to/model/files]`
@@ -90,7 +90,7 @@ disable-model-invocation: true
 
 **Key challenge**: The interview question bank must be comprehensive enough to cover all 7 elements and 11 design concepts, but adaptive enough to skip irrelevant questions based on model type.
 
-### Task 3: `/lazyodd:plan` skill
+### Task 3: `/odder:plan` skill
 **File**: `skills/plan/SKILL.md`
 **Effort**: Medium
 **Frontmatter**: `disable-model-invocation: true`
@@ -108,7 +108,7 @@ disable-model-invocation: true
 
 **Note**: This skill does NOT bundle ODD reference files. It reads the research artifacts which already contain structured findings. The plan itself will instruct the draft agent to read its own bundled reference files.
 
-### Task 4: `/lazyodd:draft` skill
+### Task 4: `/odder:draft` skill
 **File**: `skills/draft/SKILL.md`
 **Effort**: Large
 **Frontmatter**: `disable-model-invocation: true`
@@ -126,7 +126,7 @@ disable-model-invocation: true
 
 **Key challenge**: The draft agent must balance following the plan (model-specific knowledge) with following the ODD standard (protocol requirements). Plan takes precedence for content; standard takes precedence for structure.
 
-### Task 5: `/lazyodd:check` skill
+### Task 5: `/odder:check` skill
 **File**: `skills/check/SKILL.md`
 **Effort**: Large
 **Frontmatter**: `disable-model-invocation: true`, `allowed-tools: Read, Grep, Glob, Write`
@@ -171,12 +171,12 @@ Tasks 2-5 must be sequential because:
 
 After building each skill, test with a known simple model:
 
-1. **After Task 2**: Run `/lazyodd:interview` against a simple model (e.g., Schelling segregation). Verify it produces well-structured `research/findings.md`.
-2. **After Task 3**: Run `/lazyodd:plan` on the research output. Verify the mega-prompt is self-contained and comprehensive.
-3. **After Task 4**: Run `/lazyodd:draft` with the plan. Verify ODD structure, citations, and confidence annotations.
-4. **After Task 5**: Run `/lazyodd:check` on the draft. Verify the rubric scoring and issue identification.
+1. **After Task 2**: Run `/odder:interview` against a simple model (e.g., Schelling segregation). Verify it produces well-structured `research/findings.md`.
+2. **After Task 3**: Run `/odder:plan` on the research output. Verify the mega-prompt is self-contained and comprehensive.
+3. **After Task 4**: Run `/odder:draft` with the plan. Verify ODD structure, citations, and confidence annotations.
+4. **After Task 5**: Run `/odder:check` on the draft. Verify the rubric scoring and issue identification.
 
-Test: `claude --plugin-dir ./lazyodd` then `/lazyodd:interview`
+Test: `claude --plugin-dir ./odder` then `/odder:interview`
 
 ## Reference Documentation
 

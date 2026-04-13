@@ -1,13 +1,13 @@
-# lazyodd Improvement Plan: Publication-Quality ODD Generation
+# odder Improvement Plan: Publication-Quality ODD Generation
 
 > Generated: 2026-03-27
-> Based on: Scientist feedback comparing lazyodd-generated ODD vs. human-written ODD (CHIME ABM)
+> Based on: Scientist feedback comparing odder-generated ODD vs. human-written ODD (CHIME ABM)
 > Research: 3 oracle agents surveyed citation tools, diagram tools, and equation rendering
 > Goal: Indistinguishable from human-written ODDs, configurable Markdown/LaTeX output, multi-agent compatible
 
 ## Executive Summary
 
-Five gaps separate lazyodd-generated ODDs from human-written ones. In order of impact:
+Five gaps separate odder-generated ODDs from human-written ones. In order of impact:
 
 1. **Citations/Bibliography** — References papers by name but no formal bibliography with full entries
 2. **Diagrams** — Zero figures vs. human ODD's 4 (interface screenshot, conceptual model, network viz, risk function curve)
@@ -29,9 +29,9 @@ All improvements converge on **Pandoc** as the compilation backbone. The ODD sta
 - YAML frontmatter → controls bibliography, CSL style, output format
 
 ```
-lazyodd/draft/odd.md (Pandoc-flavored Markdown)
-    + lazyodd/draft/references.bib
-    + lazyodd/draft/diagrams/ (auto-generated .mmd/.dot files)
+odder/draft/odd.md (Pandoc-flavored Markdown)
+    + odder/draft/references.bib
+    + odder/draft/diagrams/ (auto-generated .mmd/.dot files)
     │
     ├─→ pandoc --citeproc -L diagram.lua → odd.pdf (publication-ready)
     ├─→ pandoc --citeproc -L diagram.lua -t latex → odd.tex
@@ -50,7 +50,7 @@ A lightweight skill that runs the Pandoc pipeline. Not required — the Markdown
 
 ### 1. Citations/Bibliography
 
-**Problem:** lazyodd ODD references papers like "Grimm et al. (2020)" in text but produces no formal References section with full bibliographic entries (journal, volume, pages, DOI).
+**Problem:** odder ODD references papers like "Grimm et al. (2020)" in text but produces no formal References section with full bibliographic entries (journal, volume, pages, DOI).
 
 **Root cause:** No citation infrastructure exists. The draft skill says "cite sources" but only means code-line references, not academic citations.
 
@@ -107,7 +107,7 @@ For any paper referenced by name without a DOI:
 
 1. Search CrossRef API: https://api.crossref.org/works?query={title}
 2. Or use Citation.js CLI: citation-js --input "{DOI}" -t string -s bibtex
-3. Add the BibTeX entry to lazyodd/draft/references.bib
+3. Add the BibTeX entry to odder/draft/references.bib
 ```
 
 **D. Update `/odd-draft` SKILL.md**
@@ -126,7 +126,7 @@ Use Pandoc-style citation keys throughout the document:
 
 ### Bibliography File
 
-Create `lazyodd/draft/references.bib` containing BibTeX entries for all cited works.
+Create `odder/draft/references.bib` containing BibTeX entries for all cited works.
 Start with the core entries from `references/odd-core.bib` (bundled with this skill).
 Add model-specific entries from the plan's Citation Requirements section.
 
@@ -177,7 +177,7 @@ Add to verification Check B (Source Traceability):
 
 ### 2. Diagrams
 
-**Problem:** Human ODDs contain figures (model interface, conceptual diagrams, network visualizations, function plots). lazyodd generates zero.
+**Problem:** Human ODDs contain figures (model interface, conceptual diagrams, network visualizations, function plots). odder generates zero.
 
 **Root cause:** No diagram generation instructions exist in any skill.
 
@@ -314,7 +314,7 @@ For diagrams that cannot be auto-generated, include a specification block:
 4. Cross-reference figures in text: "as shown in Figure 1"
 5. For Mermaid: keep under 15 nodes per diagram to avoid layout chaos
 6. For network diagrams with 50+ nodes: use Graphviz DOT, not Mermaid
-7. Save diagram source files to lazyodd/draft/diagrams/ for reuse
+7. Save diagram source files to odder/draft/diagrams/ for reuse
 
 ````
 
@@ -661,7 +661,7 @@ Key external references:
 
 ## What NOT to Change
 
-Based on the comparison, these aspects of lazyodd are already strong and should be preserved:
+Based on the comparison, these aspects of odder are already strong and should be preserved:
 
 - **Confidence annotations** ({CODE_VERIFIED}, {INFERRED}, etc.) — unique strength, not in human ODDs
 - **Inline source references** ([source: file:line]) — valuable for traceability

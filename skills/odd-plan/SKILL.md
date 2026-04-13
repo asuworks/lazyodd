@@ -15,7 +15,7 @@ metadata:
 
 You are a prompt architect transforming research findings into a self-contained, executable generation plan. A fresh agent with zero prior context must be able to execute this plan to produce a complete ODD+2 document.
 
-**IMMEDIATE EXECUTION**: When this skill is invoked, begin working immediately. Read the input files and start building the plan — do not wait for additional user input.
+**IMMEDIATE EXECUTION**: When this skill is invoked, begin working immediately. Read the input files and start building the plan — do not wait for additional user input. **Exception:** In Guided mode, pause at the Diagram Plan step to present diagram recommendations for approval.
 
 ## Inputs
 
@@ -33,6 +33,14 @@ Check the `Autonomy Level` field in the Model Overview section of `odder/researc
 - **Guided**: The plan should instruct the draft agent to present each ODD section to the user for review before continuing to the next. Include explicit pause points.
 - **Semi-autonomous**: The plan should instruct the draft agent to generate the complete ODD, then present it as a whole for a single review pass.
 - **Autonomous**: The plan should instruct the draft agent to generate the complete ODD in one pass with no mid-process review. Mark uncertain content with `{INFERRED}` or `{UNVERIFIABLE}` confidence tags. The user will review the final output.
+
+## Read Voice Preference
+
+Check the `Narrative Voice` field in the Model Overview section of `odder/research/findings.md`. Embed this in the plan's Context section. If not specified, default to **mixed**.
+
+- **Mixed**: Instruct the draft agent to use first person ("we") for design rationale and third person ("the model") for descriptions
+- **Third-person only**: Instruct the draft agent to always use "the model", never "we"
+- **First-person**: Instruct the draft agent to use "we" throughout
 
 ## Plan Design Principles
 
@@ -68,11 +76,37 @@ Based on model complexity (recorded in findings):
 | **Moderate** (3-10 entity types, 5-15 submodels) | Main agent + code analysis sub-agent for Element 7                                                    |
 | **Complex** (10+ types or 15+ submodels)         | Main agent coordinates sub-agents: code analyzer for submodels, domain specialist for design concepts |
 
-### Step 3: Construct the Plan
+### Step 3: Plan Diagrams
+
+Based on model complexity and the Diagrams Inventory from findings.md, determine which diagrams to include in the ODD.
+
+**Complexity-based defaults:**
+
+| Complexity | Recommended diagrams                                                                                                      |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Simple     | Process scheduling flowchart (if scheduling has >3 steps)                                                                 |
+| Moderate   | Process scheduling flowchart + Entity hierarchy                                                                           |
+| Complex    | Process scheduling flowchart + Entity hierarchy + Interaction/network diagram + submodel flowcharts for complex submodels |
+
+**Autonomy-adjusted behavior:**
+
+- **Guided**: Present the recommended diagrams to the user via the structured interaction tool. Ask: "Based on the model complexity, I recommend these diagrams: [list]. Would you like to add, remove, or modify any?" Wait for approval before embedding in the plan.
+- **Semi-autonomous**: Present recommendations as an informational note in the plan output. The user reviews the full plan before it's used.
+- **Autonomous**: Select diagrams based on complexity defaults and the Diagrams Inventory. No pause needed.
+
+For each planned diagram, specify in the plan's Knowledge Base:
+
+- Diagram type (Mermaid flowchart / Mermaid classDiagram / Mermaid sequenceDiagram)
+- Which ODD element it belongs to
+- What entities/processes to include
+- Expected level of detail
+- Caption text
+
+### Step 4: Construct the Plan
 
 Build the mega-prompt with all sections below. Every piece of knowledge from the research must appear somewhere in the plan — nothing should be left in the research that the draft agent would need but not find in the plan.
 
-### Step 4: Encode Terminology
+### Step 5: Encode Terminology
 
 Extract all domain-specific terms from the research findings and interview log. Create an explicit terminology table in the plan with:
 
@@ -80,7 +114,7 @@ Extract all domain-specific terms from the research findings and interview log. 
 - Terms to avoid (common paraphrases that would be incorrect)
 - Definition in the model's context
 
-### Step 5: Specify Progressive Disclosure
+### Step 6: Specify Progressive Disclosure
 
 For simple models: the plan is one document with all details inline.
 
@@ -111,6 +145,7 @@ Then read all source materials listed below and follow the section-by-section in
 - ODD format: [strict/extended/summary]
 - Input quality: [assessment]
 - Autonomy level: [guided/semi-autonomous/autonomous]
+- Narrative voice: [mixed/third-person/first-person]
 
 ## Source Materials
 
@@ -135,6 +170,11 @@ Read these files before drafting:
 
 [all findings, with source citations]
 [specific instructions: entity table format, state variable lists, scale specifications]
+
+### Implementation Context
+
+[Language/platform, version, libraries, repository URL, hardware requirements — from findings]
+[Instruct draft agent to include this as a subsection within Element 2]
 
 ### Element 3: Process Overview and Scheduling
 
@@ -203,6 +243,19 @@ Read these files before drafting:
 
 [all findings, equations, pseudocode, parameters with values/ranges/units/sources]
 [repeat for each submodel]
+
+## Diagram Plan
+
+### Planned Diagrams
+
+| #   | Diagram | Type | ODD Element | Entities/Processes | Caption |
+| --- | ------- | ---- | ----------- | ------------------ | ------- |
+
+### Diagram Instructions for Draft Agent
+
+For each diagram above, generate a Mermaid code block inline in the ODD document.
+The draft agent may add additional diagrams if it discovers something worth illustrating
+during source code analysis, but must not remove any diagrams listed above.
 
 ## Quality Standards
 

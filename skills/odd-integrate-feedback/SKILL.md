@@ -49,16 +49,17 @@ Build a summary from the frontmatter fields across all reports. For each field, 
 
 **Compute these aggregates:**
 
-| Metric                       | How                                                             |
-| ---------------------------- | --------------------------------------------------------------- |
-| Weakest phase                | Most frequent `weakest_phase` value                             |
-| Top interview issues         | Most frequent tags in `interview_issues`                        |
-| Top edit types               | Most frequent tags in `edit_types`                              |
-| Consistently weak elements   | Elements appearing in `weak_elements` across multiple reports   |
-| Consistently strong elements | Elements appearing in `strong_elements` across multiple reports |
-| Reuse willingness            | Distribution of `would_reuse` values                            |
-| Edit severity                | Distribution of `edits_needed` values                           |
-| Reimplementability           | Distribution of `reimplementable` values                        |
+| Metric                       | How                                                                                                                 |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Weakest phase                | Most frequent `weakest_phase` value                                                                                 |
+| Top interview issues         | Most frequent tags in `interview_issues`                                                                            |
+| Top edit types               | Most frequent tags in `edit_types`                                                                                  |
+| Consistently weak elements   | Elements appearing in `weak_elements` across multiple reports                                                       |
+| Consistently strong elements | Elements appearing in `strong_elements` across multiple reports                                                     |
+| Reuse willingness            | Distribution of `would_reuse` values                                                                                |
+| Edit severity                | Distribution of `edits_needed` values                                                                               |
+| Reimplementability           | Distribution of `reimplementable` values                                                                            |
+| Diagram/equation issues      | Count of `missing_diagrams`, `wrong_diagrams`, `unnumbered_equations`, `wrong_voice` in edit types and draft issues |
 
 **Also collect:**
 

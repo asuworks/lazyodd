@@ -47,6 +47,10 @@ These are the fixed tag values used in frontmatter. When a user picks "Other" an
 - `wrong_parameter_values` — Parameter values don't match code or docs
 - `missing_submodels` — Submodels omitted or incomplete
 - `poor_pseudocode` — Pseudocode/equations unclear or absent
+- `missing_diagrams` — Expected diagrams absent
+- `wrong_diagrams` — Diagrams don't match code/model structure
+- `unnumbered_equations` — Display equations not numbered or cross-referenced
+- `wrong_voice` — Narrative voice inconsistent or doesn't match preference
 
 ### Check Issues (used in Call 5)
 
@@ -61,6 +65,8 @@ These are the fixed tag values used in frontmatter. When a user picks "Other" an
 - `missing_content` — Added sections or details the draft omitted
 - `tone_wording` — Rewrote for clarity or scientific style
 - `structural` — Reorganized sections or moved content between elements
+- `diagram_fixes` — Added, removed, or corrected figures
+- `equation_fixes` — Fixed mathematical formulations or numbering
 
 ### ODD Elements
 
@@ -187,6 +193,20 @@ Question 3:
       description: "A few miscategorized but generally right"
     - label: "No"
       description: "Many claims had wrong confidence levels"
+
+Question 4:
+  question: "How were the diagrams, equations, and writing style in the generated ODD?"
+  header: "Presentation"
+  multiSelect: true
+  options:
+    - label: "Diagrams helpful"
+      description: "Figures clarified model structure or processes"
+    - label: "Diagrams missing/wrong"
+      description: "Expected diagrams were absent or inaccurate"
+    - label: "Equations clear"
+      description: "Mathematical formulations were correct and well-numbered"
+    - label: "Equations unclear"
+      description: "Equations were missing, unnumbered, or hard to follow"
 ```
 
 ### Call 4: Verification & Traceability
@@ -247,6 +267,10 @@ Question 1:
       description: "Rewrote for clarity or scientific style"
     - label: "Structural"
       description: "Reorganized sections or moved content between elements"
+    - label: "Diagram fixes"
+      description: "Added, removed, or corrected figures"
+    - label: "Equation fixes"
+      description: "Fixed mathematical formulations or numbering"
 
 Question 2:
   question: "Which ODD elements had the most problems? (select all that apply)"

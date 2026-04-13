@@ -52,9 +52,14 @@ Before scanning any files, ask the modeler about their preferences for this sess
 
 3. **Scope**: "Is there anything specific you want me to focus on or skip?"
 
+4. **Narrative voice**: "What writing style should the ODD use?"
+   - **Mixed** (default): First person ("we designed X because...") for design rationale, third person ("the model does Y") for descriptions
+   - **Third-person only**: Always "the model" — formal, some journals require it
+   - **First-person**: Use "we" throughout — more personal, emphasizes the team's choices
+
 Record these preferences — especially the autonomy level — and adapt all subsequent phases accordingly.
 
-**Persist the autonomy choice**: The autonomy level MUST be written to the findings output (see Output section) so that downstream skills (`/plan`, `/draft`, `/check`) can read it and adjust their behavior.
+**Persist the autonomy and voice choices**: The autonomy level and narrative voice MUST be written to the findings output (see Output section) so that downstream skills (`/plan`, `/draft`, `/check`) can read them and adjust their behavior.
 
 ## Autonomy-Adjusted Behavior
 
@@ -111,7 +116,22 @@ Scan all model files to build an inventory. If the user provided a file or direc
    Are there any files I missed? Any additional documentation (papers, reports, supplementary materials) you'd like me to consider?
    ```
 
-3. Assess input quality:
+3. Look for existing figures, diagrams, or visualizations:
+   - Screenshots of model interface/GUI
+   - Published figures from papers about this model
+   - Diagrams in documentation (flowcharts, architecture diagrams)
+   - Network or spatial visualizations
+
+4. Auto-detect diagrammable structures from code:
+   - Entity class/type hierarchies (for Entity Hierarchy diagrams)
+   - Main scheduling loop or step procedures (for Process Scheduling flowcharts)
+   - Network creation or interaction patterns (for Interaction diagrams)
+
+   Present detected structures to the modeler:
+   "I found [structures]. Would any of these benefit from diagrams in the ODD?
+   Are there other diagrams you'd like included?"
+
+5. Assess input quality:
 
    | Category                      | Criteria                                                           |
    | ----------------------------- | ------------------------------------------------------------------ |
@@ -119,6 +139,16 @@ Scan all model files to build an inventory. If the user provided a file or direc
    | **Code + minimal docs**       | Source code with only basic comments/README                        |
    | **Code only**                 | Source code with no separate documentation                         |
    | **Docs only**                 | Documentation without access to source code                        |
+
+### Implementation Context
+
+After the file inventory, gather technical context:
+
+- What programming language/platform is the model implemented in? What version?
+- What libraries, extensions, or frameworks does it depend on?
+- Where is the source code available? (GitHub URL, COMSES, institutional repository)
+- Is the code documented/commented?
+- Are there hardware requirements or performance considerations?
 
 ## Phase 3: Complexity Assessment
 
@@ -168,6 +198,19 @@ Use your agent's structured interaction tool for multiple-choice questions (e.g.
 - If the modeler says "I don't know" or "I'm not sure", record that honestly.
 - If information conflicts between code and documentation, ask the modeler which is correct.
 
+**Rationale probing:** After documenting what the model does for each element, ask ONE follow-up about why:
+
+- "Why did you choose [this approach] over alternatives?"
+- "What informed this design decision — was it based on literature, empirical data, or practical constraints?"
+- "Are there known limitations of this approach that you'd want documented?"
+
+Focus rationale probing on:
+
+- Choice of entity types (Element 2)
+- Process scheduling order (Element 3)
+- Key submodel formulations (Element 7)
+- Network/interaction structure (Element 4.8)
+
 ### Question Bank
 
 Organize questions by ODD element. Skip questions already answered by the files you've read. Adapt depth based on model complexity.
@@ -179,6 +222,9 @@ Organize questions by ODD element. Skip questions already answered by the files 
 - What observable patterns should the model reproduce to be considered successful?
 - How would you know if the model is working correctly?
 - Is there a key graph or result that demonstrates the model's purpose?
+- Is this model part of a larger research project? If so, how does it fit in?
+- Who was involved in the model's development? (disciplines, team composition)
+- Has this model been published or presented? If so, where?
 
 #### Element 2: Entities, State Variables, and Scales
 
@@ -248,6 +294,12 @@ For each process identified in Element 3:
 - Where do parameter values come from? (literature, calibration, assumption?)
 - Are there alternative formulations that were considered?
 - What are the boundary conditions and edge cases?
+- What is the exact mathematical formulation? (equations, not prose descriptions)
+- Can you write out the equation with variable definitions?
+- What are the units of each variable in the equation?
+- Are there any conditional expressions or piecewise functions?
+
+**Important:** When you find mathematical operations in the code, convert them to standard mathematical notation and present them to the modeler for verification. Do not describe equations in prose when a formula exists.
 
 ## Phase 5: ODD Format Configuration
 
@@ -305,6 +357,7 @@ When the interview is complete, generate two files:
 - Input Quality Assessment: [code+docs / code+minimal-docs / code-only / docs-only]
 - Model Complexity: [simple / moderate / complex]
 - ODD Format Decision: [strict / extended / summary]
+- Narrative Voice: [mixed / third-person / first-person]
 
 ## Element 1: Purpose and Patterns
 
@@ -392,6 +445,19 @@ When the interview is complete, generate two files:
 
 [findings, sources, confidence, open questions]
 [repeat for each submodel]
+
+## Diagrams Inventory
+
+| Diagram | Source | Type | Auto-generatable? |
+| ------- | ------ | ---- | ----------------- |
+
+## Implementation Context
+
+- Language/Platform: [e.g., NetLogo 6.1]
+- Key extensions: [e.g., GIS extension, NW extension]
+- Repository: [URL]
+- Documentation: [level of code commenting]
+- Hardware: [any special requirements]
 ```
 
 ### `odder/research/interview-log.md`

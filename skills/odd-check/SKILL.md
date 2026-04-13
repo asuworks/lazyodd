@@ -74,9 +74,18 @@ Verify against the checklists in `odd-guidance-ref.md`:
 - [ ] All 7 ODD elements present as sections
 - [ ] All 11 design concepts addressed under Element 4 (even if "not applicable" — must be explicitly stated)
 - [ ] No empty or placeholder sections
-- [ ] Rationale subsections included where design rationale was available
+- [ ] Rationale subsections present for Elements 1, 2, 3, 5, and each submodel in Element 7
+- [ ] Rationale subsections with no modeler-provided rationale are marked {UNVERIFIABLE}
 - [ ] Element ordering follows ODD+2 standard (1-7, with design concepts numbered 4.1-4.11)
 - [ ] ODD citation statement present ("The model description follows the ODD...")
+- [ ] Diagrams present where the generation plan specified them
+- [ ] All figures have captions with sequential numbering ("Figure 1.", "Figure 2.", ...)
+- [ ] Figures are cross-referenced in the text
+- [ ] Mermaid code blocks use correct diagram type (flowchart, classDiagram, sequenceDiagram)
+- [ ] All display equations are numbered sequentially with \tag{N}
+- [ ] Equations referenced in text use correct numbers (eq. (1), equation (2), etc.)
+- [ ] All variables in equations are defined with units immediately after the equation
+- [ ] Implementation context subsection present within Element 2 (language, platform, version, repository)
 
 For each element, check its content against the corresponding checklist in the guidance document.
 
@@ -99,6 +108,7 @@ To verify citations: for a sample of at least 10 claims (or all claims if fewer 
 - [ ] Process order in Element 3 is consistent with submodel descriptions in Element 7
 - [ ] Entity types in Element 2 match those discussed in Element 4 design concepts
 - [ ] Initialization values in Element 5 are consistent with state variables in Element 2
+- [ ] Narrative voice is consistent throughout (matches the voice preference in findings.md)
 
 ### D. Code Alignment
 
@@ -110,6 +120,9 @@ If source code is available:
 - [ ] Initialization values in Element 5 match code defaults
 - [ ] Parameter values stated in the ODD match values in code
 - [ ] Decision rules match implemented logic
+- [ ] Process scheduling flowchart (if present) matches the execution order described in Element 3
+- [ ] Entity hierarchy diagram (if present) matches entity types and state variables in Element 2
+- [ ] Interaction diagrams (if present) accurately represent agent communication patterns in code
 
 For each mismatch found, record the ODD claim, the code location, and what the code actually does.
 

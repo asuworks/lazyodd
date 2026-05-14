@@ -1,10 +1,25 @@
 # odder
 
-Agent skills that generate complete ODD+2 protocol documents from agent-based model code and documentation. 4-phase, human-in-the-loop workflow designed to preserve author's intent.
+Agent skills that generate complete ODD+2 protocol documents from agent-based model code and documentation. 4-phase, human-in-the-loop workflow designed to preserve the author's intent:
+
+1. The agent **interviews** the author about the model, **explores** existing model files, and customizes the generation process through all 4 phases.
+2. The agent **plans** the protocol generation. Planning of the generation is intentionally extracted into a separate step such that a human can review the plan before the agent generates nonsense.
+3. The agent **generates** a draft ODD protocol based on the plan from the previous step.
+4. The agent **verifies** the draft against existing model files and generates a **verification report**. This step is intended to reduce hallucinations.
 
 Compatible with any agent that supports the [Agent Skills](https://agentskills.io) standard: Claude Code, GitHub Copilot, Cursor, Gemini CLI, OpenCode, VS Code, OpenAI Codex, and many more.
 
 ## Quick Start
+
+It is recommended to install odder in the folder where you keep your model files.
+
+```bash
+cd my/model/files
+```
+
+Install odder skills using npx:
+
+[Node.js](https://nodejs.org) is required for the `npx` installer (`npx` runs the [skills CLI](https://github.com/vercel-labs/skills) automatically).
 
 ```bash
 # Install to your project:
@@ -17,15 +32,27 @@ npx skills add comses/odder -a claude-code -a codex
 npx skills add comses/odder -g
 ```
 
-Requires [Node.js](https://nodejs.org) (`npx` runs the [skills CLI](https://github.com/vercel-labs/skills) automatically).
+If you don't have [Node.js](https://nodejs.org) installed, or don't want to use `npx`, install the skills manually:
+
+```bash
+cd /tmp
+git clone https://github.com/comses/odder
+
+# Go to your model files folder
+cd my/model/files
+
+# Copy the contents of this repo's `skills/` directory into the local `.agents/skills/` directory that compatible agents scan for project skills.
+mkdir -p .agents/skills
+cp -R /tmp/odder/skills/* .agents/skills/
+```
 
 ### Run
 
 ```bash
-/odd-interview .   # Phase 1: research + interview
-/odd-plan          # Phase 2: generation plan
-/odd-draft         # Phase 3: ODD document
-/odd-check         # Phase 4: verification
+/odd-interview .   # Phase 1: interview + source files exploration
+/odd-plan          # Phase 2: generate instrucstions for ODD protocol generation
+/odd-draft         # Phase 3: generate draft ODD protocol
+/odd-check         # Phase 4: verify ODD draft and generate a verification report
 /odd-feedback      # Optional: tell us how it went
 ```
 
